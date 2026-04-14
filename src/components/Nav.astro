@@ -1,0 +1,39 @@
+---
+interface NavLink {
+  label: string;
+  slide: number;
+}
+
+interface Props {
+  links: NavLink[];
+}
+
+const { links } = Astro.props;
+---
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#" data-go-slide="0" aria-label="Home">
+      <img class="nav-logo-img" src="/blackheartbarbell.png" alt="Blackheart Barbell" />
+    </a>
+    <button
+      class="nav-toggle"
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+    >
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <ul class="nav-menu" id="nav-menu" role="list">
+      {links.map((link) => (
+        <li>
+          <button class="nav-link nav-link--btn" data-go-slide={link.slide}>
+            {link.label}
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>

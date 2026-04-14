@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import HomeSlide from '../components/slides/HomeSlide.astro';
+import PromosSlide from '../components/slides/PromosSlide.astro';
+import ProgramsSlide from '../components/slides/ProgramsSlide.astro';
+import ApplySlide from '../components/slides/ApplySlide.astro';
+import AboutSlide from '../components/slides/AboutSlide.astro';
+
+const navLinks = [
+  { label: 'Home', slide: 0 },
+  { label: 'Promo Codes', slide: 1 },
+  { label: 'View Programs', slide: 2 },
+  { label: 'Apply for Coaching', slide: 3 },
+  { label: 'Meet Coach Tiff', slide: 4 },
+];
+
+const slideDots = [
+  { label: 'Home', index: 0 },
+  { label: 'Promo Codes', index: 1 },
+  { label: 'Programs', index: 2 },
+  { label: 'Apply for Coaching', index: 3 },
+  { label: 'Meet Coach Tiff', index: 4 },
+];
+---
+
+<Base>
+  <Nav links={navLinks} />
+
+  <div class="slides-track">
+    <div class="slides-inner" id="slides-inner">
+      <HomeSlide />
+      <PromosSlide />
+      <ProgramsSlide />
+      <ApplySlide />
+      <AboutSlide />
+    </div>
+
+    <div class="slide-dots" id="slide-dots" aria-hidden="true">
+      {slideDots.map((dot) => (
+        <button
+          class={`slide-dot${dot.index === 0 ? ' is-active' : ''}`}
+          data-go-slide={dot.index}
+          aria-label={dot.label}
+        />
+      ))}
+    </div>
+  </div>
+</Base>
+
+<script>
+  const slidesInner = document.getElementById('slides-inner')!;
+  const navToggle = document.querySelector<HTMLButtonElement>('.nav-toggle')!;
+  const navMenu = document.getElementById('nav-menu')!;
+  const SLIDE_COUNT = 5;
+  let current = 0;
+
+  function slideTo(index: number) {
+    current = Math.max(0, Math.min(index, SLIDE_COUNT - 1));
+    slidesInner.style.transform = `translateX(calc(${-current} * 100vw))`;
+
+    document.querySelectorAll('.slide-dot').forEach((dot, i) => {
+      dot.classList.toggle('is-active', i === current);
+    });
+
+    document.querySelectorAll<HTMLElement>('.nav-link[data-go-slide]').forEach((link) => {
+      link.classList.toggle('is-active', parseInt(link.dataset.goSlide!, 10) === current);
+    });
+
+    navMenu.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+
+    setTimeout(() => {
+      const slides = slidesInner.querySelectorAll('.slide');
+      const activeSlide = slides[current];
+      const heading = activeSlide?.querySelector<HTMLElement>('h1, h2');
+      if (heading) {
+        if (!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
+        heading.focus({ preventScroll: true });
+      }
+    }, 420);
+  }
+
+  // Click delegation for data-go-slide
+  document.addEventListener('click', (e) => {
+    const el = (e.target as Element).closest<HTMLElement>('[data-go-slide]');
+    if (!el) return;
+    e.preventDefault();
+    slideTo(parseInt(el.dataset.goSlide!, 10));
+  });
+
+  // Hamburger toggle
+  navToggle.addEventListener('click', () => {
+    const isOpen = navMenu.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  // Close nav on outside click
+  document.addEventListener('click', (e) => {
+    const siteNav = document.querySelector('.site-nav');
+    if (siteNav && !siteNav.contains(e.target as Node)) {
+      navMenu.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') slideTo(current + 1);
+    if (e.key === 'ArrowLeft') slideTo(current - 1);
+  });
+
+  // Touch/swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      slideTo(dx > 0 ? current + 1 : current - 1);
+    }
+  }, { passive: true });
+
+  // Apply Now → pre-select program checkbox
+  document.querySelectorAll<HTMLElement>('.card-cta[data-program]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const program = btn.dataset.program ?? '';
+      document.querySelectorAll<HTMLInputElement>('input[name="program_type"]').forEach((cb) => {
+        if (cb.value === program) cb.checked = true;
+      });
+      document.querySelector<HTMLElement>('.other-text-wrap')?.setAttribute('hidden', '');
+    });
+  });
+</script>

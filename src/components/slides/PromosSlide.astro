@@ -1,0 +1,27 @@
+---
+import PromoCard from '../PromoCard.astro';
+import promos from '../../data/promos.json';
+---
+
+<div class="slide">
+  <section id="promos" class="promos">
+    <div class="section-inner">
+      <h2 class="section-heading">Promo Codes</h2>
+      <p class="section-subheading">
+        Brands Coach Tiff personally uses and recommends. Use these codes to save.
+      </p>
+      <div class="promo-list">
+        {promos.map((promo) => (
+          <PromoCard
+            id={promo.id}
+            brand={promo.brand}
+            code={promo.code}
+            description={promo.description}
+            shopUrl={promo.shopUrl}
+            usage={promo.usage}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</div>

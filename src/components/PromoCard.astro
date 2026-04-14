@@ -1,0 +1,68 @@
+---
+interface Props {
+  id: string;
+  brand: string;
+  code: string;
+  description: string;
+  shopUrl: string;
+  usage: string;
+}
+
+const { id, brand, code, description, shopUrl, usage } = Astro.props;
+---
+
+<div class="promo-card">
+  <span class="promo-brand">{brand}</span>
+  <p class="promo-label">{description}</p>
+  <div class="promo-code-row">
+    <span class="promo-code" id={`promo-code-${id}`}>{code}</span>
+    <button
+      class="promo-copy-btn"
+      data-code={code}
+      data-shop={shopUrl}
+      aria-label={`Copy promo code ${code}`}
+    >
+      Copy
+    </button>
+  </div>
+  <p class="promo-usage">{usage}</p>
+  <a class="promo-shop-link" href={shopUrl} target="_blank" rel="noopener noreferrer">
+    Shop Now →
+  </a>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.promo-copy-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const code = btn.dataset.code ?? '';
+      const shop = btn.dataset.shop ?? '';
+
+      function onCopied() {
+        btn.textContent = '✓ Copied!';
+        btn.classList.add('is-copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('is-copied');
+        }, 2000);
+      }
+
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(code).then(onCopied).catch(() => fallbackCopy(code, onCopied));
+      } else {
+        fallbackCopy(code, onCopied);
+      }
+    });
+  });
+
+  function fallbackCopy(text: string, callback: () => void) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'absolute';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); callback(); } catch {}
+    document.body.removeChild(ta);
+  }
+</script>

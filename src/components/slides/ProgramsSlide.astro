@@ -1,0 +1,28 @@
+---
+import ProgramCard from '../ProgramCard.astro';
+import programs from '../../data/programs.json';
+---
+
+<div class="slide">
+  <section id="membership" class="membership">
+    <div class="section-inner">
+      <h2 class="section-heading">Programs</h2>
+      <p class="section-subheading">Choose the program that fits your goals and your life.</p>
+      <div class="cards-grid">
+        {programs.map((program) => (
+          <ProgramCard
+            tag={program.tag}
+            title={program.title}
+            price={program.price}
+            period={program.period}
+            features={program.features}
+            featured={program.featured}
+            badge={program.badge}
+            program={program.program}
+            ctaStyle={program.ctaStyle as 'primary' | 'secondary'}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</div>
