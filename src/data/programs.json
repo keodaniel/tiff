@@ -42,7 +42,7 @@
     "featured": false,
     "badge": null,
     "program": "General Strength and Wellness",
-    "ctaStyle": "secondary",
+    "ctaStyle": "primary",
     "features": [
       { "text": "3–5 day/week programming based on goals & experience" },
       { "text": "Weekly check-ins" },
@@ -59,7 +59,7 @@
     "featured": false,
     "badge": null,
     "program": "Military Strength & Conditioning",
-    "ctaStyle": "secondary",
+    "ctaStyle": "primary",
     "features": [
       { "text": "5 day/week programming" },
       { "text": "Weekly check-ins" },
