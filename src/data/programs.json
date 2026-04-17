@@ -1,22 +1,5 @@
 [
   {
-    "id": "oly-in-person",
-    "tag": "In-Person · Vista, CA",
-    "title": "Olympic Weightlifting In-Person Team",
-    "price": 150,
-    "period": "month",
-    "featured": false,
-    "badge": null,
-    "program": "Olympic Weightlifting",
-    "ctaStyle": "primary",
-    "features": [
-      { "text": "3–5 day/week programming based on goals & experience" },
-      { "text": "In-person coaching at NC Fitness and Performance", "url": "https://www.northcounty.fitness/" },
-      { "text": "Technique-focused training sessions" },
-      { "text": "Access to team training environment" }
-    ]
-  },
-  {
     "id": "oly-remote",
     "tag": "Remote",
     "title": "Olympic Weightlifting Remote Team",
