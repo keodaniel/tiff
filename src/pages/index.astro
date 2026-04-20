@@ -3,14 +3,14 @@ import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import HomeSlide from '../components/slides/HomeSlide.astro';
 import PromosSlide from '../components/slides/PromosSlide.astro';
-import ProgramsSlide from '../components/slides/ProgramsSlide.astro';
+import MembershipsSlide from '../components/slides/MembershipsSlide.astro';
 import ApplySlide from '../components/slides/ApplySlide.astro';
 import AboutSlide from '../components/slides/AboutSlide.astro';
 
 const navLinks = [
   { label: 'Home', slide: 0 },
   { label: 'Promo Codes', slide: 1 },
-  { label: 'View Programs', slide: 2 },
+  { label: 'View Memberships', slide: 2 },
   { label: 'Apply for Coaching', slide: 3 },
   { label: 'Meet Coach Tiff', slide: 4 },
 ];
@@ -18,7 +18,7 @@ const navLinks = [
 const slideDots = [
   { label: 'Home', index: 0 },
   { label: 'Promo Codes', index: 1 },
-  { label: 'Programs', index: 2 },
+  { label: 'View Memberships', index: 2 },
   { label: 'Apply for Coaching', index: 3 },
   { label: 'Meet Coach Tiff', index: 4 },
 ];
@@ -31,7 +31,7 @@ const slideDots = [
     <div class="slides-inner" id="slides-inner">
       <HomeSlide />
       <PromosSlide />
-      <ProgramsSlide />
+      <MembershipsSlide />
       <ApplySlide />
       <AboutSlide />
     </div>
