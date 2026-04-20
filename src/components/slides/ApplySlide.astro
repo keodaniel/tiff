@@ -17,6 +17,10 @@
       </div>
 
       <form id="coaching-form" novalidate>
+        <input type="hidden" name="access_key" value="fabe745e-b651-4a48-acc7-bc165024bf08" />
+        <input type="hidden" name="subject" value="New Athlete Application" />
+        <input type="hidden" name="from_name" value="Blackheart Barbell" />
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" />
 
         <div class="form-group">
           <label class="form-label" for="field-name">Full Name *</label>
@@ -82,29 +86,10 @@
           <span class="form-error" aria-live="polite" id="error-goals" hidden>Please tell us about your athletic goals.</span>
         </div>
 
-        <fieldset class="form-group form-group--fieldset">
-          <legend class="form-label">Best way to reach you * <span style="font-weight:400;color:#c0b8b8;">(fill at least one)</span></legend>
-          <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
-            <div>
-              <label class="form-label" for="field-phone" style="font-weight:400;font-size:0.8rem;color:#c0b8b8;margin-bottom:4px;display:block;">Phone Number</label>
-              <input class="form-input" type="tel" id="field-phone" name="phone" inputmode="numeric" autocomplete="tel" placeholder="e.g. (555) 867-5309" />
-            </div>
-            <div>
-              <label class="form-label" for="field-contact-email" style="font-weight:400;font-size:0.8rem;color:#c0b8b8;margin-bottom:4px;display:block;">Email</label>
-              <input class="form-input" type="email" id="field-contact-email" name="contact_email" autocomplete="email" placeholder="you@example.com" />
-            </div>
-          </div>
-          <span class="form-error" aria-live="polite" id="error-contact" hidden>Please provide a phone number or email.</span>
-        </fieldset>
-
         <div class="form-group">
-          <label class="form-label" for="field-ready">Are you ready to get started? *</label>
-          <select class="form-input form-select" id="field-ready" name="ready" required>
-            <option value="" disabled selected>Select one...</option>
-            <option value="ABSOLUTELY">ABSOLUTELY</option>
-            <option value="Other">Other</option>
-          </select>
-          <span class="form-error" aria-live="polite" id="error-ready" hidden>Please make a selection.</span>
+          <label class="form-label" for="field-phone">Phone Number *</label>
+          <input class="form-input" type="tel" id="field-phone" name="phone" autocomplete="tel" placeholder="e.g. (555) 867-5309" />
+          <span class="form-error" aria-live="polite" id="error-contact" hidden>Please provide a phone number.</span>
         </div>
 
         <button type="submit" class="btn btn-primary form-submit">Submit Application</button>
@@ -147,15 +132,20 @@
   }
 
   // Clear on input
-  (['field-name','field-email','field-schedule','field-history','field-goals','field-phone','field-contact-email'] as const)
-    .forEach(id => document.getElementById(id)?.addEventListener('input', () => clearError(document.getElementById(id), `error-${id.replace('field-','')}`)));
-  document.getElementById('field-ready')?.addEventListener('change', () => clearError(document.getElementById('field-ready'), 'error-ready'));
+  (['field-name','field-email','field-schedule','field-history','field-goals'] as const)
+    .forEach(id => {
+      const el = document.getElementById(id);
+      el?.addEventListener('input', () => clearError(el, `error-${id.replace('field-','')}`));
+    });
+  const phoneField = document.getElementById('field-phone') as HTMLInputElement | null;
+  phoneField?.addEventListener('input', () => clearError(phoneField, 'error-contact'));
+  otherTextInput?.addEventListener('input', () => clearError(otherTextInput, 'error-program'));
   form.querySelectorAll<HTMLInputElement>('input[name="program_type"]').forEach(cb =>
     cb.addEventListener('change', () => { document.getElementById('error-program')?.setAttribute('hidden', ''); })
   );
 
   // Submit
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const errors: (HTMLElement | null)[] = [];
 
@@ -164,9 +154,6 @@
     const scheduleField = document.getElementById('field-schedule') as HTMLTextAreaElement;
     const historyField = document.getElementById('field-history') as HTMLTextAreaElement;
     const goalsField = document.getElementById('field-goals') as HTMLTextAreaElement;
-    const phoneField = document.getElementById('field-phone') as HTMLInputElement;
-    const contactEmailField = document.getElementById('field-contact-email') as HTMLInputElement;
-    const readyField = document.getElementById('field-ready') as HTMLSelectElement;
     const checkedPrograms = form.querySelectorAll<HTMLInputElement>('input[name="program_type"]:checked');
 
     if (!nameField.value.trim()) errors.push(setError(nameField, 'error-name', 'Please enter your name.'));
@@ -193,49 +180,35 @@
     if (!goalsField.value.trim()) errors.push(setError(goalsField, 'error-goals', 'Please tell us about your athletic goals.'));
     else clearError(goalsField, 'error-goals');
 
-    if (!phoneField.value.trim() && !contactEmailField.value.trim()) {
-      errors.push(setError(phoneField, 'error-contact', 'Please provide a phone number or email.'));
+    if (!phoneField?.value.trim()) {
+      errors.push(setError(phoneField, 'error-contact', 'Please provide a phone number.'));
     } else clearError(phoneField, 'error-contact');
-
-    if (!readyField.value) errors.push(setError(readyField, 'error-ready', 'Please make a selection.'));
-    else clearError(readyField, 'error-ready');
 
     if (errors.length > 0) { errors[0]?.focus(); return; }
 
-    // TODO: Replace with Web3Forms fetch when access key is ready.
-    // For now, fall back to mailto.
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting…'; }
+
     const programLines = Array.from(checkedPrograms).map(cb => {
-      if (cb.value === 'Other') return `- Other: ${otherTextInput?.value.trim() ?? ''}`;
-      return `- ${cb.value}`;
-    }).join('\n');
+      if (cb.value === 'Other') return `Other: ${otherTextInput?.value.trim() ?? ''}`;
+      return cb.value;
+    }).join(', ');
 
-    const body = [
-      'New Coaching Application',
-      '========================',
-      '',
-      `Name: ${nameField.value.trim()}`,
-      `Email: ${emailField.value.trim()}`,
-      '',
-      `Program Type(s):\n${programLines}`,
-      '',
-      `Current Training Schedule:\n${scheduleField.value.trim()}`,
-      '',
-      `Athletic History:\n${historyField.value.trim()}`,
-      '',
-      `Athletic Goals:\n${goalsField.value.trim()}`,
-      '',
-      `Phone: ${phoneField.value.trim() || '—'}`,
-      `Contact Email: ${contactEmailField.value.trim() || '—'}`,
-      '',
-      `Ready to Get Started: ${readyField.value}`,
-    ].join('\n');
+    const formData = new FormData(form);
+    formData.set('program_type', programLines);
 
-    window.location.href = `mailto:keodanielc@gmail.com?subject=New%20Coaching%20Application&body=${encodeURIComponent(body)}`;
-
-    form.setAttribute('hidden', '');
-    if (formSuccess) {
-      formSuccess.removeAttribute('hidden');
-      formSuccess.scrollIntoView({ behavior: 'smooth' });
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message ?? 'Submission failed');
+      form.setAttribute('hidden', '');
+      if (formSuccess) {
+        formSuccess.removeAttribute('hidden');
+        formSuccess.scrollIntoView({ behavior: 'smooth' });
+      }
+    } catch {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Application'; }
+      alert('Something went wrong. Please try again or email us directly.');
     }
   });
 </script>

@@ -35,7 +35,7 @@ const { tag, title, price, period, features, featured = false, badge, program, c
         <span class="feature-check" aria-hidden="true">✓</span>
         <span>
           {feature.url
-            ? <a href={feature.url} target="_blank" rel="noopener noreferrer" style="color:#8b1a1a;text-decoration:underline;">{feature.text}</a>
+            ? <a href={feature.url} target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.85);text-decoration:underline;">{feature.text}</a>
             : feature.text}
         </span>
       </li>

@@ -2,14 +2,40 @@
 
 ## Project Overview
 
-Static single-file personal coaching website for Coach Tiff / Blackheart Barbell. All HTML, CSS, and JS live inline in one file (`index.html`). Horizontal slide layout with five sections.
+Static Astro site for Coach Tiff / Blackheart Barbell. Horizontal slide layout with five sections. Built with Astro (static output), deployed to Cloudflare Pages.
 
 ## File Structure
 
-- `index.html` — entire site (inline CSS, HTML, JS — no external files)
-- `tiff_profile.jpeg` — hero profile photo
-- `blackheartbarbell.jpg` — logo used in nav and footer
-- `Dockerfile` / `run-claude.sh` — Claude Code sandbox setup
+```
+src/
+  components/
+    slides/
+      HomeSlide.astro       — slide 0: hero
+      PromosSlide.astro     — slide 1: promo codes
+      ProgramsSlide.astro   — slide 2: view programs
+      ApplySlide.astro      — slide 3: apply for coaching
+      AboutSlide.astro      — slide 4: meet coach tiff
+    Footer.astro
+    Nav.astro
+    ProgramCard.astro
+    PromoCard.astro
+  data/
+    programs.json           — program definitions (used by ProgramsSlide)
+    promos.json             — promo code definitions (used by PromosSlide)
+  layouts/
+    Base.astro              — HTML shell, loads global.css
+  pages/
+    index.astro             — slide orchestration + all JS (slideTo, swipe, keyboard, etc.)
+  styles/
+    global.css              — all site CSS
+public/
+  tiff_profile.jpeg         — hero profile photo
+  blackheartbarbell.png     — logo used in nav and footer
+  favicon.ico / favicon.svg
+astro.config.mjs
+package.json
+tsconfig.json
+```
 
 ## Slide Layout
 
@@ -19,23 +45,27 @@ Five horizontal slides navigated by swipe, arrow keys, nav links, or dot indicat
 |-------|------|
 | 0 | Home (hero) |
 | 1 | Promo Codes |
-| 2 | View Membership |
+| 2 | View Programs |
 | 3 | Apply for Coaching |
 | 4 | Meet Coach Tiff |
 
 ## Navigation System
 
-Slides are driven by `data-go-slide="N"` attributes and the `slideTo(N)` JS function. Never use `href="#section"` anchors for in-page navigation — always use `data-go-slide` or call `slideTo()` directly.
+Slides are driven by `data-go-slide="N"` attributes and the `slideTo(N)` JS function defined in `src/pages/index.astro`. Never use `href="#section"` anchors for in-page navigation — always use `data-go-slide` or call `slideTo()` directly.
 
 ## Local Dev
 
-Run from **Windows PowerShell** (not WSL):
-
 ```powershell
-python -m http.server 8080
+npm run dev
 ```
 
-Find your LAN IP with `ipconfig` to reach the site from mobile on the same WiFi.
+Find your LAN IP with `ipconfig` to reach the site from mobile on the same WiFi. Astro dev server binds to `localhost:4321` by default.
+
+To build:
+
+```powershell
+npm run build
+```
 
 ## Parallel Agent Orchestration
 
@@ -50,15 +80,18 @@ This is the primary working pattern. Sequential work is the exception, not the r
 6. After all parallel agents finish, review and integrate results
 
 **Example splits:**
-- CSS changes vs JS changes vs HTML structure — three parallel agents
-- One agent per slide section when editing multiple slides
+- CSS changes (`global.css`) vs JS changes (`index.astro` script) vs HTML/component changes — three parallel agents
+- One agent per slide component when editing multiple slides
 - Research agent (reads current code) → then parallel implementation agents
 
 Never do sequentially what can be done in parallel.
 
 ## Code Constraints
 
-- Keep everything in `index.html` — no separate CSS or JS files
+- CSS lives in `src/styles/global.css` — no inline `<style>` blocks
+- JS lives in the `<script>` tag in `src/pages/index.astro` — no separate JS files
+- Slide components are in `src/components/slides/` — one `.astro` file per slide
+- Data-driven content (promos, programs) lives in `src/data/*.json` and is imported by its slide component
 - Preserve all form field `name` and `id` attributes (form submits via `mailto:`)
 - Never break `slideTo()`, `data-go-slide`, `.slides-inner`, `.slides-track`
 - Maintain accessibility: `aria-` attributes, `role`, keyboard navigation
