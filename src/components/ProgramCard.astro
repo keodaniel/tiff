@@ -5,6 +5,7 @@ interface Feature {
 }
 
 interface Props {
+  id: string;
   tag: string;
   title: string;
   price: number;
@@ -16,7 +17,7 @@ interface Props {
   ctaStyle?: 'primary' | 'secondary';
 }
 
-const { tag, title, price, period, features, featured = false, badge, program, ctaStyle = 'primary' } = Astro.props;
+const { id, tag, title, price, period, features, featured = false, badge, program } = Astro.props;
 ---
 
 <article class={`card${featured ? ' card--featured' : ''}`} aria-label={`${title} membership`}>
@@ -41,7 +42,8 @@ const { tag, title, price, period, features, featured = false, badge, program, c
       </li>
     ))}
   </ul>
-  <button class={`btn btn-${ctaStyle} card-cta`} data-go-slide="3" data-program={program}>
-    Apply Now
-  </button>
+  <div class="card-cta-group">
+    <a href={`/checkout?membership=${id}`} class="btn btn-primary card-cta">Join Now</a>
+    <button class="btn btn-secondary card-cta" data-go-slide="3" data-program={program}>Apply First</button>
+  </div>
 </article>

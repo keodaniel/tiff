@@ -1,0 +1,78 @@
+---
+interface Props {
+  id: string;
+  tag: string;
+  title: string;
+  price: number;
+  features: string[];
+  badge?: string | null;
+  variants?: string[];
+  category?: string;
+}
+
+const { id, tag, title, price, features, badge, variants = [], category = 'programs' } = Astro.props;
+const type = category === 'merch' ? 'merch' : 'one_time';
+const hasVariants = variants.length > 0;
+---
+
+<article class="card" aria-label={title}>
+  {badge && <div class="card-badge">{badge}</div>}
+  <p class="card-tag">{tag}</p>
+  <div class="card-header">
+    <h3 class="card-title">{title}</h3>
+    <div class="card-price">
+      <span class="card-price-amount">${price}</span>
+      <span class="card-price-period">one time</span>
+    </div>
+  </div>
+  <ul class="card-features" role="list">
+    {features.map((feature) => (
+      <li class="card-feature-item">
+        <span class="feature-check" aria-hidden="true">✓</span>
+        <span>{feature}</span>
+      </li>
+    ))}
+  </ul>
+  {hasVariants && (
+    <div class="shop-size-selector">
+      <p class="shop-size-label">Size</p>
+      <div class="shop-size-options" role="group" aria-label="Select a size">
+        {variants.map((v) => (
+          <button
+            class="shop-size-btn"
+            type="button"
+            data-item-id={id}
+            data-size={v}
+            aria-pressed="false"
+          >
+            {v}
+          </button>
+        ))}
+      </div>
+    </div>
+  )}
+  {hasVariants && (
+    <div class="shop-qty-selector" data-item-id={id} hidden>
+      <p class="shop-size-label">Quantity</p>
+      <div class="shop-qty-stepper" data-qty="1">
+        <button class="shop-qty-btn shop-qty-dec" type="button" aria-label="Decrease quantity">−</button>
+        <span class="shop-qty-value" aria-live="polite">1</span>
+        <button class="shop-qty-btn shop-qty-inc" type="button" aria-label="Increase quantity">+</button>
+      </div>
+    </div>
+  )}
+  <div class="card-cta-group">
+    <button
+      class="btn btn-primary card-cta shop-add-btn"
+      type="button"
+      data-item-id={id}
+      data-item-title={title}
+      data-item-price-cents={price * 100}
+      data-item-type={type}
+      aria-pressed="false"
+      disabled={hasVariants}
+    >
+      {hasVariants ? 'Select a Size' : 'Add to Cart'}
+    </button>
+  </div>
+</article>
