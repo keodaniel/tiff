@@ -5,6 +5,7 @@ interface Feature {
 }
 
 interface Props {
+  id: string;
   tag: string;
   title: string;
   price: number;
@@ -14,9 +15,11 @@ interface Props {
   badge?: string | null;
   program: string;
   ctaStyle?: 'primary' | 'secondary';
+  stripeUrl?: string;
+  inquireOnly?: boolean;
 }
 
-const { tag, title, price, period, features, featured = false, badge, program, ctaStyle = 'primary' } = Astro.props;
+const { id, tag, title, price, period, features, featured = false, badge, program, stripeUrl, inquireOnly = false } = Astro.props;
 ---
 
 <article class={`card${featured ? ' card--featured' : ''}`} aria-label={`${title} membership`}>
@@ -24,10 +27,12 @@ const { tag, title, price, period, features, featured = false, badge, program, c
   <p class="card-tag">{tag}</p>
   <div class="card-header">
     <h3 class="card-title">{title}</h3>
-    <div class="card-price">
-      <span class="card-price-amount">${price}</span>
-      <span class="card-price-period">/{period}</span>
-    </div>
+    {!inquireOnly && (
+      <div class="card-price">
+        <span class="card-price-amount">${price}</span>
+        <span class="card-price-period">/{period}</span>
+      </div>
+    )}
   </div>
   <ul class="card-features" role="list">
     {features.map((feature) => (
@@ -41,7 +46,8 @@ const { tag, title, price, period, features, featured = false, badge, program, c
       </li>
     ))}
   </ul>
-  <button class={`btn btn-${ctaStyle} card-cta`} data-go-slide="3" data-program={program}>
-    Apply Now
-  </button>
+  <div class="card-cta-group">
+    <button class="btn btn-secondary card-cta" data-go-slide="3" data-program={program}>Inquire</button>
+    {!inquireOnly && <a href={stripeUrl} class="btn btn-primary card-cta">Join Now</a>}
+  </div>
 </article>

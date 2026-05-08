@@ -11,6 +11,7 @@ import programs from '../../data/programs.json';
       <div class="cards-grid">
         {programs.map((program) => (
           <ProgramCard
+            id={program.id}
             tag={program.tag}
             title={program.title}
             price={program.price}
@@ -20,6 +21,8 @@ import programs from '../../data/programs.json';
             badge={program.badge}
             program={program.program}
             ctaStyle={program.ctaStyle as 'primary' | 'secondary'}
+            stripeUrl={program.stripeUrl}
+            inquireOnly={program.inquireOnly}
           />
         ))}
       </div>

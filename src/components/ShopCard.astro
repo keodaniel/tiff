@@ -1,0 +1,90 @@
+---
+interface Props {
+  id: string;
+  tag: string;
+  title: string;
+  price?: number;
+  features: string[];
+  badges?: string[];
+  variants?: string[];
+  category?: string;
+  stripeUrl?: string;
+}
+
+const { id, tag, title, price, features, badges = [], variants = [], category = 'programs', stripeUrl } = Astro.props;
+const type = category === 'merch' ? 'merch' : 'one_time';
+const hasVariants = variants.length > 0;
+---
+
+<article class="card" aria-label={title}>
+  {badges.length > 0 && (
+    <div class="card-badges">
+      {badges.map((b) => <div class="card-badge">{b}</div>)}
+    </div>
+  )}
+  <p class="card-tag">{tag}</p>
+  <div class="card-header">
+    <h3 class="card-title">{title}</h3>
+    {price !== undefined && (
+      <div class="card-price">
+        <span class="card-price-amount">${price}</span>
+        {category !== 'merch' && <span class="card-price-period">one time</span>}
+      </div>
+    )}
+  </div>
+  <ul class="card-features" role="list">
+    {features.map((feature) => (
+      <li class="card-feature-item">
+        <span class="feature-check" aria-hidden="true">✓</span>
+        <span>{feature}</span>
+      </li>
+    ))}
+  </ul>
+  {hasVariants && (
+    <div class="shop-size-selector">
+      <p class="shop-size-label">Size</p>
+      <div class="shop-size-options" role="group" aria-label="Select a size">
+        {variants.map((v) => (
+          <button
+            class="shop-size-btn"
+            type="button"
+            data-item-id={id}
+            data-size={v}
+            aria-pressed="false"
+          >
+            {v}
+          </button>
+        ))}
+      </div>
+    </div>
+  )}
+  {hasVariants && (
+    <div class="shop-qty-selector" data-item-id={id} hidden>
+      <p class="shop-size-label">Quantity</p>
+      <div class="shop-qty-stepper" data-qty="1">
+        <button class="shop-qty-btn shop-qty-dec" type="button" aria-label="Decrease quantity">−</button>
+        <span class="shop-qty-value" aria-live="polite">1</span>
+        <button class="shop-qty-btn shop-qty-inc" type="button" aria-label="Increase quantity">+</button>
+      </div>
+    </div>
+  )}
+  <div class="card-cta-group">
+    {stripeUrl
+      ? <a href={stripeUrl} class="btn btn-primary card-cta">Sign Up Now</a>
+      : (
+        <button
+          class="btn btn-primary card-cta shop-add-btn"
+          type="button"
+          data-item-id={id}
+          data-item-title={title}
+          data-item-price-cents={price !== undefined ? price * 100 : 0}
+          data-item-type={type}
+          aria-pressed="false"
+          disabled={hasVariants}
+        >
+          {hasVariants ? 'Select a Size' : 'Add to Cart'}
+        </button>
+      )
+    }
+  </div>
+</article>
