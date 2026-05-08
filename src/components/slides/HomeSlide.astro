@@ -1,4 +1,8 @@
 ---
+import ShopCard from '../ShopCard.astro';
+import shopItems from '../../data/shop.json';
+
+const courses = shopItems.filter((item) => item.category === 'courses');
 ---
 
 <div class="slide">
@@ -22,8 +26,23 @@
           <button class="btn btn-primary" data-go-slide="2">View Memberships</button>
           <button class="btn btn-primary" data-go-slide="3">Apply for Coaching</button>
           <button class="btn btn-primary" data-go-slide="4">About Me</button>
-          <a href="/shop" class="btn btn-secondary">Shop</a>
         </div>
+        {courses.length > 0 && (
+          <div class="hero-courses">
+            {courses.map((item) => (
+              <ShopCard
+                id={item.id}
+                tag={item.tag}
+                title={item.title}
+                price={item.price}
+                features={item.features}
+                badges={item.badges ?? []}
+                category={item.category}
+                stripeUrl={'stripeUrl' in item ? item.stripeUrl : undefined}
+              />
+            ))}
+          </div>
+        )}
       </div>
       <div class="scroll-hint" aria-hidden="true">→</div>
     </div>

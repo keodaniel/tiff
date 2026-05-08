@@ -15,9 +15,10 @@ interface Props {
   badge?: string | null;
   program: string;
   ctaStyle?: 'primary' | 'secondary';
+  stripeUrl?: string;
 }
 
-const { id, tag, title, price, period, features, featured = false, badge, program } = Astro.props;
+const { id, tag, title, price, period, features, featured = false, badge, program, stripeUrl } = Astro.props;
 ---
 
 <article class={`card${featured ? ' card--featured' : ''}`} aria-label={`${title} membership`}>
@@ -44,6 +45,6 @@ const { id, tag, title, price, period, features, featured = false, badge, progra
   </ul>
   <div class="card-cta-group">
     <button class="btn btn-secondary card-cta" data-go-slide="3" data-program={program}>Inquire</button>
-        <a href={`/checkout?membership=${id}`} class="btn btn-primary card-cta">Join Now</a>
+        <a href={stripeUrl ?? `/checkout?membership=${id}`} class="btn btn-primary card-cta">Join Now</a>
   </div>
 </article>

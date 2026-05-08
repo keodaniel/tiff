@@ -5,7 +5,7 @@
     "category": "programs",
     "title": "5 Week Mobility Prep for Olympic Weightlifting",
     "price": 49,
-    "badge": null,
+    "badges": [],
     "features": [
       "Daily mobility routines — hip, ankle, and thoracic spine",
       "5 weeks of progressive flexibility work",
@@ -20,7 +20,7 @@
     "category": "programs",
     "title": "8 Week USMC PFT Prep",
     "price": 39,
-    "badge": "New",
+    "badges": ["New"],
     "features": [
       "Pull-ups, crunches, and 3-mile run programming",
       "5 days per week structured training",
@@ -35,13 +35,29 @@
     "category": "merch",
     "title": "Blackheart Barbell Team T-Shirt",
     "price": 35,
-    "badge": null,
+    "badges": [],
     "variants": ["XS", "S", "M", "L", "XL", "2XL"],
     "features": [
       "100% heavyweight cotton",
       "Blackheart Barbell logo on chest",
       "Unisex relaxed fit",
       "Available in XS – 2XL"
+    ]
+  },
+  {
+    "id": "6wk-oly-crash-course-for-crossfitters",
+    "stripeUrl": "https://book.stripe.com/14AcN7bqB0EvaDGfSOdZ60h",
+    "tag": "Digital Program",
+    "category": "courses",
+    "title": "6-Week Olympic Weightlifting Crash Course for Crossfitters",
+    "price": 250,
+    "badges": ["New!","Next Course Starting June 1st"],
+    "features": [
+      "Daily Video Reviews of Snatch, Clean & Jerk, and Accessory Work",
+      "Snatch and Clean & Jerk Testing / Technical Assessment with Personalized Feedback",
+      "Group Programming for Technique and Strength Development, 3 days per week",
+      "Post Course Snatch and Clean & Jerk Testing with Progress Evaluation",
+      "Personalized technical feedback and coaching cues"
     ]
   }
 ]

@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import ShopCard from '../components/ShopCard.astro';
 import shopItems from '../data/shop.json';
 
+const courses = shopItems.filter((item) => item.category === 'courses');
 const programs = shopItems.filter((item) => item.category === 'programs');
 const merch = shopItems.filter((item) => item.category === 'merch');
 ---
@@ -24,6 +25,25 @@ const merch = shopItems.filter((item) => item.category === 'merch');
       <p class="section-subheading">Programs and merch from Blackheart Barbell.</p>
 
       <div class="shop-section">
+        <h2 class="shop-section-title">Courses</h2>
+        <p class="shop-section-desc">Remote coached courses.</p>
+        <div class="cards-grid">
+          {courses.map((item) => (
+            <ShopCard
+              id={item.id}
+              tag={item.tag}
+              title={item.title}
+              price={item.price}
+              features={item.features}
+              badges={item.badges ?? []}
+              category={item.category}
+              stripeUrl={'stripeUrl' in item ? item.stripeUrl : undefined}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div class="shop-section">
         <h2 class="shop-section-title">Programs</h2>
         <p class="shop-section-desc">One-time purchase digital programs, delivered to your inbox.</p>
         <div class="cards-grid">
@@ -34,7 +54,7 @@ const merch = shopItems.filter((item) => item.category === 'merch');
               title={item.title}
               price={item.price}
               features={item.features}
-              badge={item.badge}
+              badges={item.badges ?? []}
               category={item.category}
             />
           ))}
@@ -52,7 +72,7 @@ const merch = shopItems.filter((item) => item.category === 'merch');
               title={item.title}
               price={item.price}
               features={item.features}
-              badge={item.badge}
+              badges={item.badges ?? []}
               variants={'variants' in item ? item.variants : []}
               category={item.category}
             />

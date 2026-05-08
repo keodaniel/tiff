@@ -5,18 +5,23 @@ interface Props {
   title: string;
   price: number;
   features: string[];
-  badge?: string | null;
+  badges?: string[];
   variants?: string[];
   category?: string;
+  stripeUrl?: string;
 }
 
-const { id, tag, title, price, features, badge, variants = [], category = 'programs' } = Astro.props;
+const { id, tag, title, price, features, badges = [], variants = [], category = 'programs', stripeUrl } = Astro.props;
 const type = category === 'merch' ? 'merch' : 'one_time';
 const hasVariants = variants.length > 0;
 ---
 
 <article class="card" aria-label={title}>
-  {badge && <div class="card-badge">{badge}</div>}
+  {badges.length > 0 && (
+    <div class="card-badges">
+      {badges.map((b) => <div class="card-badge">{b}</div>)}
+    </div>
+  )}
   <p class="card-tag">{tag}</p>
   <div class="card-header">
     <h3 class="card-title">{title}</h3>
@@ -62,17 +67,22 @@ const hasVariants = variants.length > 0;
     </div>
   )}
   <div class="card-cta-group">
-    <button
-      class="btn btn-primary card-cta shop-add-btn"
-      type="button"
-      data-item-id={id}
-      data-item-title={title}
-      data-item-price-cents={price * 100}
-      data-item-type={type}
-      aria-pressed="false"
-      disabled={hasVariants}
-    >
-      {hasVariants ? 'Select a Size' : 'Add to Cart'}
-    </button>
+    {stripeUrl
+      ? <a href={stripeUrl} class="btn btn-primary card-cta">Sign Up Now</a>
+      : (
+        <button
+          class="btn btn-primary card-cta shop-add-btn"
+          type="button"
+          data-item-id={id}
+          data-item-title={title}
+          data-item-price-cents={price * 100}
+          data-item-type={type}
+          aria-pressed="false"
+          disabled={hasVariants}
+        >
+          {hasVariants ? 'Select a Size' : 'Add to Cart'}
+        </button>
+      )
+    }
   </div>
 </article>

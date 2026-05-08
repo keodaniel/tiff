@@ -63,24 +63,15 @@ import programs from '../data/programs.json';
 
             <div class="checkout-section">
               <h3 class="checkout-section-title">Payment</h3>
-              <div class="mock-payment-panel" aria-label="Payment method placeholder — Stripe coming soon">
-                <div class="mock-card-placeholder">
-                  <span class="mock-card-number">•••• •••• •••• ••••</span>
-                  <div class="mock-card-row">
-                    <div class="mock-card-field">
-                      <span class="mock-card-label">Expiry</span>
-                      <span class="mock-card-value">MM / YY</span>
-                    </div>
-                    <div class="mock-card-field">
-                      <span class="mock-card-label">CVC</span>
-                      <span class="mock-card-value">•••</span>
-                    </div>
-                  </div>
-                </div>
-                <p class="mock-payment-notice">
-                  <span aria-hidden="true">🔒</span> Secure payment powered by Stripe — coming soon
-                </p>
-              </div>
+            <script async
+              src="https://js.stripe.com/v3/buy-button.js">
+            </script>
+
+            <stripe-buy-button
+              buy-button-id="buy_btn_1TUcv1RE6BMx1xgCeeefatVq"
+              publishable-key="pk_live_51OV3lRRE6BMx1xgCTYDjumnsfMJDDLH4rUr9JZX9nBRMY3FMr3wJFqW64mdNUuRtCukKxtVFtWMupebELjqhRMwa00rT6dEpTD"
+            >
+            </stripe-buy-button>
             </div>
 
             <div class="checkout-section">

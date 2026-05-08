@@ -1,6 +1,7 @@
 [
   {
     "id": "oly-remote",
+    "stripeUrl": "https://buy.stripe.com/9B628t52dcndcLO9uqdZ60g",
     "tag": "Remote",
     "title": "Olympic Weightlifting Remote Team",
     "price": 200,
@@ -18,6 +19,7 @@
   },
   {
     "id": "general-strength",
+    "stripeUrl": "https://buy.stripe.com/aFaaEZ66haf57rudKGdZ60e",
     "tag": "Remote",
     "title": "General Strength Remote Team",
     "price": 175,
@@ -35,6 +37,7 @@
   },
   {
     "id": "military",
+    "stripeUrl": "https://buy.stripe.com/6oU9AVamxevlh244a6dZ60c",
     "tag": "Remote",
     "title": "Military / Fire Strength & Conditioning",
     "price": 175,
