@@ -47,17 +47,17 @@
   {
     "id": "6wk-oly-crash-course-for-crossfitters",
     "stripeUrl": "https://book.stripe.com/14AcN7bqB0EvaDGfSOdZ60h",
-    "tag": "Digital Program",
+    "tag": "Remote Course",
     "category": "courses",
     "title": "6-Week Olympic Weightlifting Crash Course for Crossfitters",
     "price": 250,
-    "badges": ["New!","Next Course Starting June 1st"],
+    "badges": ["New","Next Course Starting June 1st"],
     "features": [
       "Daily Video Reviews of Snatch, Clean & Jerk, and Accessory Work",
-      "Snatch and Clean & Jerk Testing / Technical Assessment with Personalized Feedback",
-      "Group Programming for Technique and Strength Development, 3 days per week",
-      "Post Course Snatch and Clean & Jerk Testing with Progress Evaluation",
-      "Personalized technical feedback and coaching cues"
+      "Tailored Technical Feedback and Coaching Cues",
+      "Snatch and Clean & Jerk Testing / Technical Assessment",
+      "Group Programming for Technique and Strength Development",
+      "Post Course One Rep Max (1RM) Testing with Live Video Coaching"
     ]
   }
 ]
