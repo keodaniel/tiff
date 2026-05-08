@@ -4,11 +4,13 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  bodyClass?: string;
 }
 
 const {
-  title = 'Coach Tiff | Blackheart Barbell',
+  title = 'Coach Tiff | Tank Performance and Weightlifting',
   description = 'USA Weightlifting Level 2 Coach and national medalist. Olympic weightlifting, strength, and conditioning programs in-person and remote.',
+  bodyClass = '',
 } = Astro.props;
 ---
 
@@ -22,7 +24,7 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
   </head>
-  <body>
+  <body class={bodyClass || undefined}>
     <slot />
   </body>
 </html>

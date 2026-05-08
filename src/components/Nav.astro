@@ -1,7 +1,8 @@
 ---
 interface NavLink {
   label: string;
-  slide: number;
+  slide?: number;
+  href?: string;
 }
 
 interface Props {
@@ -14,7 +15,7 @@ const { links } = Astro.props;
 <nav class="site-nav">
   <div class="nav-inner">
     <a class="nav-logo" href="#" data-go-slide="0" aria-label="Home">
-      <img class="nav-logo-img" src="/blackheartbarbell.png" alt="Blackheart Barbell" />
+      <img class="nav-logo-img" src="/tank_perf_wl_logo.jpg" alt="Tank Performance and Weightlifting" />
     </a>
     <button
       class="nav-toggle"
@@ -29,9 +30,10 @@ const { links } = Astro.props;
     <ul class="nav-menu" id="nav-menu" role="list">
       {links.map((link) => (
         <li>
-          <button class="nav-link nav-link--btn" data-go-slide={link.slide}>
-            {link.label}
-          </button>
+          {link.href
+            ? <a class="nav-link nav-link--shop" href={link.href}>{link.label}</a>
+            : <button class="nav-link nav-link--btn" data-go-slide={link.slide}>{link.label}</button>
+          }
         </li>
       ))}
     </ul>

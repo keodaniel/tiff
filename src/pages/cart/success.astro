@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="Order Confirmed | Coach Tiff" bodyClass="page-standalone">
+  <header class="checkout-header">
+    <a href="/" class="checkout-logo-link" aria-label="Home — Tank Performance and Weightlifting">
+      <img src="/tank_perf_wl_logo.jpg" alt="Tank Performance and Weightlifting" class="checkout-logo" />
+    </a>
+  </header>
+
+  <main class="checkout-main">
+    <div class="section-inner checkout-confirmation">
+      <div class="confirmation-icon" aria-hidden="true">✓</div>
+      <h1 class="confirmation-heading">Order Confirmed</h1>
+      <div class="confirmation-details" id="confirmation-details">
+        <ul class="confirmation-item-list" id="confirmation-items" role="list"></ul>
+        <p class="confirmation-price" id="confirmation-total"></p>
+      </div>
+      <p class="confirmation-message">
+        Your digital program(s) will be delivered to your email within 24 hours.
+      </p>
+      <p class="confirmation-ref" id="confirmation-ref"></p>
+      <a href="/" class="btn btn-primary checkout-home-btn">Back to Home</a>
+    </div>
+  </main>
+</Base>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const encoded = params.get('session');
+
+  if (encoded) {
+    try {
+      const session = JSON.parse(atob(decodeURIComponent(encoded)));
+
+      const itemsEl = document.getElementById('confirmation-items');
+      const totalEl = document.getElementById('confirmation-total');
+      const refEl = document.getElementById('confirmation-ref');
+
+      if (itemsEl && Array.isArray(session.items)) {
+        session.items.forEach((title: string) => {
+          const li = document.createElement('li');
+          li.className = 'confirmation-item';
+          li.textContent = title;
+          itemsEl.appendChild(li);
+        });
+      }
+      if (totalEl) totalEl.textContent = '$' + (session.totalCents / 100).toFixed(0) + ' total';
+      if (refEl) refEl.textContent = 'Reference: ' + session.id;
+    } catch (_) {
+      // silently ignore malformed session
+    }
+  }
+</script>
