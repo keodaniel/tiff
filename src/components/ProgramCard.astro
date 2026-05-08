@@ -16,9 +16,10 @@ interface Props {
   program: string;
   ctaStyle?: 'primary' | 'secondary';
   stripeUrl?: string;
+  inquireOnly?: boolean;
 }
 
-const { id, tag, title, price, period, features, featured = false, badge, program, stripeUrl } = Astro.props;
+const { id, tag, title, price, period, features, featured = false, badge, program, stripeUrl, inquireOnly = false } = Astro.props;
 ---
 
 <article class={`card${featured ? ' card--featured' : ''}`} aria-label={`${title} membership`}>
@@ -26,10 +27,12 @@ const { id, tag, title, price, period, features, featured = false, badge, progra
   <p class="card-tag">{tag}</p>
   <div class="card-header">
     <h3 class="card-title">{title}</h3>
-    <div class="card-price">
-      <span class="card-price-amount">${price}</span>
-      <span class="card-price-period">/{period}</span>
-    </div>
+    {!inquireOnly && (
+      <div class="card-price">
+        <span class="card-price-amount">${price}</span>
+        <span class="card-price-period">/{period}</span>
+      </div>
+    )}
   </div>
   <ul class="card-features" role="list">
     {features.map((feature) => (
@@ -45,6 +48,6 @@ const { id, tag, title, price, period, features, featured = false, badge, progra
   </ul>
   <div class="card-cta-group">
     <button class="btn btn-secondary card-cta" data-go-slide="3" data-program={program}>Inquire</button>
-        <a href={stripeUrl ?? `/checkout?membership=${id}`} class="btn btn-primary card-cta">Join Now</a>
+    {!inquireOnly && <a href={stripeUrl} class="btn btn-primary card-cta">Join Now</a>}
   </div>
 </article>

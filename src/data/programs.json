@@ -19,7 +19,7 @@
   },
   {
     "id": "general-strength",
-    "stripeUrl": "https://buy.stripe.com/aFaaEZ66haf57rudKGdZ60e",
+    "inquireOnly": true,
     "tag": "Remote",
     "title": "General Strength Remote Team",
     "price": 175,
@@ -37,7 +37,7 @@
   },
   {
     "id": "military",
-    "stripeUrl": "https://buy.stripe.com/6oU9AVamxevlh244a6dZ60c",
+    "inquireOnly": true,
     "tag": "Remote",
     "title": "Military / Fire Strength & Conditioning",
     "price": 175,
@@ -47,7 +47,7 @@
     "program": "Military Strength & Conditioning",
     "ctaStyle": "primary",
     "features": [
-      { "text": "5 day/week programming" },
+      { "text": "3-5 day/week programming" },
       { "text": "Weekly check-ins" },
       { "text": "Conditioning integrated with strength work" },
       { "text": "Designed for the demands of service and duty" }
