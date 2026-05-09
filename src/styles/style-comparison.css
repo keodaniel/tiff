@@ -3,17 +3,6 @@
 
 :root {
   --page-bg: #080808;
-
-  --tank-bg: #111111;
-  --tank-surface: #1a1a1a;
-  --tank-surface-3: #222222;
-  --tank-border: #2a2a2a;
-  --tank-text: #f0f0f0;
-  --tank-text-muted: #888888;
-  --tank-text-dim: #555555;
-  --tank-accent: #CC0000;
-  --tank-accent-dark: #990000;
-  --tank-accent-glow: rgba(204,0,0,0.12);
 }
 
 html {
@@ -24,7 +13,7 @@ body.style-comparison-page {
   margin: 0;
   min-height: 100vh;
   background: var(--page-bg);
-  color: var(--tank-text);
+  color: #f0f0f0;
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.5;
   overflow-x: hidden;
@@ -40,8 +29,8 @@ body.style-comparison-page {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);
-  border-bottom: 1px solid rgba(204,0,0,0.35);
+  background: #0a0a0a;
+  border-bottom: 1px solid #2a2a2a;
   box-shadow: 0 10px 30px rgba(0,0,0,0.45);
 }
 
@@ -60,7 +49,7 @@ body.style-comparison-page {
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--tank-accent);
+  color: #cc0000;
   white-space: nowrap;
   padding-right: 18px;
   border-right: 1px solid rgba(255,255,255,0.12);
@@ -77,18 +66,18 @@ body.style-comparison-page {
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--tank-text-muted);
+  color: #888;
   text-decoration: none;
   padding: 7px 10px;
-  border: 1px solid var(--tank-border);
+  border: 1px solid #2a2a2a;
   border-radius: 3px;
   transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
 
 .style-jump-links a:hover {
-  color: var(--tank-text);
-  border-color: var(--tank-accent);
-  background: var(--tank-accent-glow);
+  color: #f0f0f0;
+  border-color: #cc0000;
+  background: rgba(204,0,0,0.12);
 }
 
 .style-page-intro {
@@ -104,7 +93,7 @@ body.style-comparison-page {
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--tank-text-muted);
+  color: #888;
   border: 1px solid rgba(255,255,255,0.08);
   padding: 8px 10px;
   background: rgba(255,255,255,0.02);
@@ -122,8 +111,8 @@ body.style-comparison-page {
 
 .style-page-intro p {
   margin: 10px 0 0;
-  max-width: 780px;
-  color: var(--tank-text-muted);
+  max-width: 850px;
+  color: #888;
   line-height: 1.6;
   font-size: 15px;
 }
@@ -136,7 +125,7 @@ body.style-comparison-page {
 
 .comparison-row {
   scroll-margin-top: 78px;
-  margin-bottom: 42px;
+  margin-bottom: 48px;
 }
 
 .comparison-row-label {
@@ -145,8 +134,8 @@ body.style-comparison-page {
   z-index: 900;
   background: rgba(8,8,8,0.92);
   backdrop-filter: blur(10px);
-  border: 1px solid var(--tank-border);
-  border-left: 3px solid var(--tank-accent);
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid #cc0000;
   border-radius: 0 4px 4px 0;
   padding: 10px 14px;
   margin-bottom: 14px;
@@ -154,12 +143,12 @@ body.style-comparison-page {
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--tank-text-muted);
+  color: #888;
 }
 
 .comparison-columns {
   display: grid;
-  grid-template-columns: repeat(4, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, minmax(280px, 500px));
   gap: 16px;
   overflow-x: auto;
   padding-bottom: 8px;
@@ -168,19 +157,20 @@ body.style-comparison-page {
 .style-panel {
   min-width: 280px;
   border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text-primary);
+  background: var(--surface);
+  color: var(--text);
   overflow: hidden;
+  border-radius: 6px;
 }
 
 .style-panel-header {
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
-  background: var(--panel-header-bg);
+  background: var(--header-bg);
 }
 
 .style-name {
-  font-family: var(--font-mono);
+  font-family: 'DM Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -189,9 +179,9 @@ body.style-comparison-page {
 }
 
 .style-stack {
-  font-family: var(--font-mono);
+  font-family: 'DM Mono', monospace;
   font-size: 10px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   line-height: 1.4;
 }
 
@@ -199,136 +189,33 @@ body.style-comparison-page {
   padding: 22px;
 }
 
-/* Themes */
-.current-style {
+/* Font variants */
+.outfit-theme {
   --font-display: 'Outfit', sans-serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
-  --font-mono: 'Courier New', monospace;
-
-  --bg-card: #111114;
-  --bg-card-hover: #18181c;
-  --border: rgba(255,255,255,0.08);
-  --border-accent: rgba(255,255,255,0.15);
-  --accent: #e8c84a;
-  --accent-dim: rgba(232,200,74,0.15);
-  --accent-hover: #f0d660;
-  --text-primary: #f0f0f0;
-  --text-secondary: #8a8a96;
-  --text-muted: #555560;
-  --badge-bg: rgba(255,255,255,0.06);
-  --button-text: #0a0a0b;
-  --panel-header-bg: rgba(255,255,255,0.03);
-  --radius: 4px;
 }
 
-.hybrid-yellow {
+.bebas-theme {
   --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
-  --font-mono: 'DM Mono', monospace;
-
-  --bg-card: #111114;
-  --bg-card-hover: #18181c;
-  --border: rgba(255,255,255,0.08);
-  --border-accent: rgba(255,255,255,0.15);
-  --accent: #e8c84a;
-  --accent-dim: rgba(232,200,74,0.15);
-  --accent-hover: #f0d660;
-  --text-primary: #f0f0f0;
-  --text-secondary: #8a8a96;
-  --text-muted: #555560;
-  --badge-bg: rgba(255,255,255,0.06);
-  --button-text: #0a0a0b;
-  --panel-header-bg: rgba(255,255,255,0.03);
-  --radius: 2px;
 }
 
-.hybrid-red-swap {
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
-  --font-mono: 'DM Mono', monospace;
-
-  --bg-card: #111114;
-  --bg-card-hover: #18181c;
-  --border: rgba(255,255,255,0.08);
-  --border-accent: rgba(204,0,0,0.35);
-  --accent: var(--tank-accent);
-  --accent-dim: var(--tank-accent-glow);
-  --accent-hover: var(--tank-accent-dark);
-  --text-primary: #f0f0f0;
-  --text-secondary: #8a8a96;
-  --text-muted: #555560;
-  --badge-bg: rgba(255,255,255,0.06);
-  --button-text: #fff;
-  --panel-header-bg: rgba(255,255,255,0.03);
-  --radius: 2px;
-}
-
-.tank-hybrid {
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
-  --font-mono: 'DM Mono', monospace;
-
-  --bg-card: var(--tank-surface);
-  --bg-card-hover: var(--tank-surface-3);
-  --border: var(--tank-border);
+/* Red treatment variants */
+.red-theme {
+  --surface: #111111;
+  --surface-2: #1a1a1a;
+  --surface-3: #222222;
+  --border: #2a2a2a;
   --border-accent: rgba(204,0,0,0.45);
-  --accent: var(--tank-accent);
-  --accent-dim: var(--tank-accent-glow);
-  --accent-hover: var(--tank-accent-dark);
-  --text-primary: var(--tank-text);
-  --text-secondary: var(--tank-text-muted);
-  --text-muted: var(--tank-text-dim);
-  --badge-bg: rgba(204,0,0,0.08);
+  --accent: #cc0000;
+  --accent-hover: #990000;
+  --accent-glow: rgba(204,0,0,0.12);
+  --text: #f0f0f0;
+  --text-muted: #888888;
+  --text-dim: #555555;
   --button-text: #fff;
-  --panel-header-bg: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);
-  --radius: 3px;
+  --header-bg: rgba(255,255,255,0.03);
 }
 
 /* Shared Components */
-.nav-sample {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 4px 0;
-}
-
-.nav-logo {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 20px;
-  color: var(--accent);
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-}
-
-.hybrid-yellow .nav-logo,
-.hybrid-red-swap .nav-logo,
-.tank-hybrid .nav-logo {
-  font-size: 25px;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-}
-
-.nav-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-left: auto;
-}
-
-.nav-link {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-decoration: none;
-}
-
-.nav-link:hover,
-.nav-cart {
-  color: var(--accent);
-}
-
 .hero-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -349,7 +236,7 @@ body.style-comparison-page {
 .workout-week-label,
 .workout-status,
 .form-label {
-  font-family: var(--font-mono);
+  font-family: 'DM Mono', monospace;
   text-transform: uppercase;
   letter-spacing: 0.13em;
 }
@@ -367,30 +254,27 @@ body.style-comparison-page {
 }
 
 .hero-heading {
-  line-height: 1;
-  color: var(--text-primary);
+  line-height: 0.98;
+  color: var(--text);
   margin: 0 0 18px;
 }
 
-.current-style .hero-heading {
-  font-size: clamp(38px, 4vw, 64px);
+.outfit-theme .hero-heading {
+  font-size: clamp(36px, 4vw, 56px);
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 
-.hybrid-yellow .hero-heading,
-.hybrid-red-swap .hero-heading,
-.tank-hybrid .hero-heading {
-  font-size: clamp(54px, 6vw, 92px);
+.bebas-theme .hero-heading {
+  font-size: clamp(44px, 5vw, 68px);
   font-weight: 400;
   letter-spacing: 0.025em;
 }
 
 .hero-sub,
-.section-subheading,
 .card-desc {
-  font-family: var(--font-body);
-  color: var(--text-secondary);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
@@ -409,11 +293,11 @@ body.style-comparison-page {
 .btn-primary,
 .btn-secondary,
 .card-cta {
-  font-family: var(--font-body);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 13px;
   font-weight: 600;
   padding: 11px 18px;
-  border-radius: var(--radius);
+  border-radius: 3px;
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
@@ -433,12 +317,20 @@ body.style-comparison-page {
 .card-cta:hover {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
+  color: #fff;
   transform: translateY(-1px);
+  box-shadow: 0 8px 24px var(--accent-glow);
+}
+
+.btn-primary:active,
+.card-cta:active,
+.btn-secondary:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-secondary {
   background: transparent;
-  color: var(--text-primary);
+  color: var(--text);
   border-color: var(--border-accent);
 }
 
@@ -446,58 +338,24 @@ body.style-comparison-page {
   color: var(--accent);
   border-color: var(--accent);
   transform: translateY(-1px);
-}
-
-.section-heading {
-  color: var(--text-primary);
-  margin: 0 0 12px;
-}
-
-.current-style .section-heading {
-  font-size: 34px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.hybrid-yellow .section-heading,
-.hybrid-red-swap .section-heading,
-.tank-hybrid .section-heading {
-  font-size: 48px;
-  letter-spacing: 0.03em;
-  font-weight: 400;
-}
-
-.section-subheading {
-  font-size: 15px;
-  margin: 0;
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 .program-card,
 .workout-card {
-  background: var(--bg-card);
+  background: var(--surface);
   border: 1px solid var(--border);
   padding: 24px;
-  border-radius: var(--radius);
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  border-radius: 6px;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s;
 }
 
 .program-card:hover,
 .workout-card:hover {
-  background: var(--bg-card-hover);
+  background: var(--surface-2);
   border-color: var(--border-accent);
-}
-
-.tank-hybrid .program-card,
-.tank-hybrid .workout-card {
-  border-radius: 6px;
-}
-
-.tank-hybrid .program-card:hover,
-.tank-hybrid .workout-card:hover,
-.tank-hybrid .btn-primary:hover,
-.tank-hybrid .card-cta:hover,
-.tank-hybrid .btn-secondary:hover {
-  box-shadow: 0 8px 24px rgba(204,0,0,0.08);
+  box-shadow: 0 8px 24px var(--accent-glow);
+  transform: translateY(-1px);
 }
 
 .card-category {
@@ -507,18 +365,16 @@ body.style-comparison-page {
 }
 
 .card-title {
-  color: var(--text-primary);
+  color: var(--text);
   margin: 0 0 8px;
 }
 
-.current-style .card-title {
+.outfit-theme .card-title {
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.hybrid-yellow .card-title,
-.hybrid-red-swap .card-title,
-.tank-hybrid .card-title {
+.bebas-theme .card-title {
   font-size: 30px;
   font-weight: 400;
   letter-spacing: 0.03em;
@@ -537,9 +393,9 @@ body.style-comparison-page {
 }
 
 .badge {
-  background: var(--badge-bg);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
+  background: var(--accent-glow);
+  border: 1px solid var(--border-accent);
+  color: var(--text-muted);
   padding: 4px 9px;
   font-size: 9px;
   border-radius: 2px;
@@ -561,7 +417,7 @@ body.style-comparison-page {
   letter-spacing: 0.03em;
 }
 
-.current-style .card-price {
+.outfit-theme .card-price {
   font-weight: 700;
   font-size: 26px;
 }
@@ -582,7 +438,7 @@ body.style-comparison-page {
 }
 
 .workout-status {
-  background: var(--accent-dim);
+  background: var(--accent-glow);
   color: var(--accent);
   border: 1px solid var(--border-accent);
   padding: 4px 9px;
@@ -609,15 +465,15 @@ body.style-comparison-page {
 }
 
 .exercise-name {
-  font-family: var(--font-body);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 13px;
-  color: var(--text-primary);
+  color: var(--text);
   line-height: 1.4;
 }
 
 .exercise-params,
 .exercise-pct {
-  font-family: var(--font-mono);
+  font-family: 'DM Mono', monospace;
   font-size: 12px;
   white-space: nowrap;
 }
@@ -627,7 +483,7 @@ body.style-comparison-page {
 }
 
 .exercise-pct {
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .mini-form {
@@ -638,31 +494,43 @@ body.style-comparison-page {
 
 .form-label {
   font-size: 10px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .form-input {
   width: 100%;
-  background: var(--bg-card-hover);
+  background: var(--surface-3);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text-primary);
+  border-radius: 3px;
+  color: var(--text);
   padding: 12px 14px;
-  font-family: var(--font-body);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 14px;
   outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.form-input::placeholder {
+  color: var(--text-dim);
+}
+
+.form-input:hover {
+  border-color: var(--border-accent);
 }
 
 .form-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-dim);
+  background: var(--surface-2);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-.tank-hybrid .form-input {
-  background: var(--tank-surface-3);
+.form-textarea {
+  min-height: 96px;
+  resize: vertical;
+  line-height: 1.5;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
   .comparison-columns {
     grid-template-columns: repeat(4, minmax(300px, 1fr));
   }
