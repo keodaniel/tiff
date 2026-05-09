@@ -18,8 +18,9 @@ import programs from '../../data/programs.json';
             period={program.period}
             features={program.features}
             featured={program.featured}
-            badge={program.badge}
+            badges={program.badges ?? []}
             program={program.program}
+            gradient={program.gradient}
             ctaStyle={program.ctaStyle as 'primary' | 'secondary'}
             stripeUrl={program.stripeUrl}
             inquireOnly={program.inquireOnly}
