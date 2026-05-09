@@ -8,7 +8,7 @@ interface Props {
 }
 
 const {
-  eyebrow = 'Olympic Weightlifting + Military Strength & Conditioning Coach',
+  eyebrow = 'Olympic Weightlifting + Tactical Strength & Conditioning Coach',
   clubName = 'Tank Performance and Weightlifting',
 } = Astro.props;
 
@@ -21,20 +21,20 @@ const courses = shopItems.filter((item) => item.category === 'courses');
       <div class="hero-photo-wrap">
         <img
           class="hero-photo"
-          src="/tiff_profile_red.png"
+          src="/tiff_profile.png"
           alt="Coach Tiff, head coach at Tank Performance and Weightlifting"
           width="200"
           height="200"
         />
       </div>
-      <div>
+      <div class="hero-content">
         <p class="hero-eyebrow">{eyebrow}</p>
-        <h1 class="hero-name">Coach Tiff</h1>
-        <p class="hero-club">{clubName}</p>
+        <h1 class="hero-name">{clubName}</h1>
+        <p class="hero-club">Owned and Operated by Coach Tiff</p>
         <div class="hero-actions">
-          <button class="btn btn-primary" data-go-slide="1">Promo Codes</button>
-          <button class="btn btn-primary" data-go-slide="2">View Memberships</button>
-          <button class="btn btn-primary" data-go-slide="3">About Me</button>
+          <button class="btn btn-primary"   data-go-slide="1">View Memberships →</button>
+          <button class="btn btn-secondary" data-go-slide="2">Promo Codes</button>
+          <button class="btn btn-secondary" data-go-slide="3">About Me</button>
         </div>
         {courses.length > 0 && (
           <div class="hero-courses">
@@ -54,6 +54,11 @@ const courses = shopItems.filter((item) => item.category === 'courses');
           </div>
         )}
       </div>
+      <img
+        class="hero-tpc-logo"
+        src="/tpc_logo_red_no_bg.png"
+        alt="Tank Performance and Weightlifting"
+      />
       <div class="scroll-hint" aria-hidden="true">→</div>
     </div>
   </section>

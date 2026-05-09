@@ -13,6 +13,7 @@
   --color-accent-glow:      rgba(204, 0, 0, 0.12);
   --font-display:           'Outfit', Georgia, serif;
   --font-body:              'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:              'DM Mono', 'Courier New', monospace;
   --radius-sm:              6px;
   --radius-md:              12px;
   --radius-pill:            20px;
@@ -160,7 +161,7 @@ button { font-family: inherit; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 24px;
+  padding: 56px 24px 16px;
 }
 .hero-inner {
   display: flex;
@@ -181,17 +182,18 @@ button { font-family: inherit; }
 }
 .hero-photo { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .hero-eyebrow {
+  font-family: var(--font-mono);
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--color-accent);
-  font-weight: 600;
+  font-weight: 500;
 }
 .hero-name {
   font-family: var(--font-display);
-  font-size: 3rem;
+  font-size: 2.6rem;
   color: var(--color-text-light);
-  line-height: 1.05;
+  line-height: 1.1;
   font-weight: 800;
 }
 .hero-club {
@@ -214,12 +216,20 @@ button { font-family: inherit; }
   width: 100%;
   margin-top: 8px;
 }
+.hero-content { min-width: 0; }
 .hero-courses {
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-top: 24px;
   width: 100%;
+}
+.hero-tpc-logo {
+  display: block;
+  width: 110px;
+  height: auto;
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 .scroll-hint {
   font-size: 1rem;
@@ -266,13 +276,19 @@ button { font-family: inherit; }
 }
 .btn-secondary {
   background-color: transparent;
-  color: var(--color-text-muted);
-  border-color: var(--color-border);
+  color: var(--color-text);
+  border-color: rgba(204, 0, 0, 0.3);
 }
 .btn-secondary:hover {
   border-color: var(--color-accent);
   color: var(--color-text-light);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--color-accent-glow);
+}
+.btn-primary:active,
+.btn-secondary:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
 }
 
 /* ── Sections ── */
@@ -332,23 +348,13 @@ button { font-family: inherit; }
   border-left: 3px solid var(--color-accent);
 }
 
-/* Card gradient title banners — d1/d2/d3 colors from the day-header reference */
+/* Card gradient title banners */
 .card-title-banner {
   padding: 14px 18px 16px;
   border-bottom: 1px solid var(--color-border);
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%);
 }
-/* ShopCard gradients in hero-courses (position-based, no prop available) */
-.hero-courses .card:nth-child(1) .card-title-banner {
-  background: linear-gradient(135deg, #1a1020, #140010);
-}
-.hero-courses .card:nth-child(2) .card-title-banner {
-  background: linear-gradient(135deg, #0f1a20, #081018);
-}
-.hero-courses .card:nth-child(3) .card-title-banner {
-  background: linear-gradient(135deg, #0a1020, #060c18);
-}
-
-/* ProgramCard banner + Inquire gradients are driven by inline styles from programs.json */
+/* ProgramCard banner gradient driven by inline style from programs.json */
 .card-cta.btn-secondary {
   border-color: rgba(255, 255, 255, 0.12);
   color: var(--color-text);
@@ -368,16 +374,18 @@ button { font-family: inherit; }
 .card-title-banner .card-badges { margin-bottom: 10px; }
 .card-badge {
   align-self: flex-start;
+  font-family: var(--font-mono);
   background-color: var(--color-accent);
   color: #fff;
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 4px 10px;
   border-radius: var(--radius-pill);
 }
 .card-tag {
+  font-family: var(--font-mono);
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -434,9 +442,9 @@ button { font-family: inherit; }
 .form-group--fieldset { border: none; padding: 0; }
 .form-label, legend.form-label {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--color-text);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   line-height: 1.4;
 }
 .form-input {
@@ -524,12 +532,13 @@ button { font-family: inherit; }
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 .promo-code {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: var(--font-mono);
   font-size: 1rem; letter-spacing: 0.1em; font-weight: 700;
   color: var(--color-text);
   display: inline-block; user-select: all; white-space: nowrap;
 }
 .promo-copy-btn {
+  font-family: var(--font-mono);
   display: inline-flex; align-items: center; gap: 6px;
   min-height: 36px; padding: 6px 12px;
   background-color: var(--color-surface-3);
@@ -552,6 +561,20 @@ button { font-family: inherit; }
 .promo-usage { font-size: 0.85rem; color: var(--color-text-muted); }
 
 /* ── About ── */
+.about-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.about-photo-wrap {
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 6px rgba(204, 0, 0, 0.15);
+}
+.about-photo { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .about-layout { display: flex; flex-direction: column; gap: 32px; margin-top: 32px; }
 .about-text { font-size: 1rem; line-height: 1.85; color: var(--color-text-muted); margin-bottom: 20px; }
 .about-text:last-child { margin-bottom: 0; }
@@ -563,8 +586,8 @@ button { font-family: inherit; }
   padding: 24px;
 }
 .credentials-title {
-  font-family: var(--font-display);
-  font-size: 0.75rem; font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.75rem; font-weight: 500;
   color: var(--color-text-muted);
   margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.12em;
 }
@@ -773,10 +796,12 @@ body.page-standalone {
     border-color: var(--color-accent-dark);
     color: #fff;
   }
-  .hero-inner { flex-direction: row; text-align: left; gap: 48px; max-width: 860px; }
+  .hero-inner { flex-direction: row; text-align: left; gap: 48px; max-width: 1100px; }
   .hero-photo-wrap { width: 200px; height: 200px; flex-shrink: 0; }
+  .hero-tpc-logo { width: 200px; height: 200px; object-fit: contain; }
+  .hero-content { flex: 1; }
   .hero-name { font-size: 3.8rem; }
-  .hero-actions { flex-direction: row; width: auto; flex-wrap: wrap; }
+  .hero-actions { flex-direction: row; width: 100%; flex-wrap: wrap; justify-content: center; }
   .scroll-hint { display: none; }
   .btn { width: auto; }
   .section-heading { font-size: 2.4rem; }
@@ -784,7 +809,7 @@ body.page-standalone {
   .form-submit { width: auto; padding: 14px 48px; }
   .about-layout { flex-direction: row; gap: 48px; align-items: flex-start; }
   .about-body { flex: 1; }
-  .credentials-badge { width: 240px; flex-shrink: 0; position: sticky; top: 80px; }
+  .about-sidebar { width: 280px; flex-shrink: 0; position: sticky; top: 80px; align-self: flex-start; }
   .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
   .checkout-layout { flex-direction: row; align-items: flex-start; gap: 36px; }
   .checkout-summary { flex: 0 0 300px; position: sticky; top: 80px; }

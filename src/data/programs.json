@@ -9,7 +9,7 @@
     "featured": true,
     "badges": ["Most Popular"],
     "program": "Olympic Weightlifting",
-    "gradient": "purple-maroon",
+    "gradient": "dark-red",
     "ctaStyle": "primary",
     "features": [
       { "text": "3–5 day/week programming based on goals & experience" },
@@ -28,7 +28,7 @@
     "featured": false,
     "badges": [],
     "program": "Tactical Strength and Conditioning",
-    "gradient": "forest",
+    "gradient": "dark-red",
     "ctaStyle": "primary",
     "features": [
       { "text": "Programming for military, law enforcement, and first responders" },
@@ -48,30 +48,13 @@
     "featured": false,
     "badges": [],
     "program": "General Strength and Conditioning",
-    "gradient": "deep-navy",
+    "gradient": "dark-red",
     "ctaStyle": "primary",
     "features": [
       { "text": "3–5 day/week programming based on goals & experience" },
       { "text": "Weekly check-ins" },
       { "text": "Goal-oriented strength programming" },
       { "text": "Progressive overload structure" }
-    ]
-  },
-  {
-    "id": "in-person-coaching",
-    "inquireOnly": true,
-    "tag": "In-Person",
-    "title": "In-Person Coaching",
-    "price": 500,
-    "period": "month",
-    "featured": false,
-    "badges": [],
-    "program": "Other",
-    "gradient": "teal-navy",
-    "ctaStyle": "primary",
-    "features": [
-      { "text": "In-person weekly coaching in the North County San Diego Area" },
-      { "text": "Olympic Weightlifting, Plyometrics, and Track Conditioning" }
     ]
   }
 ]

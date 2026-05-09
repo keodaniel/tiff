@@ -1,5 +1,6 @@
 ---
 const GRADIENTS: Record<string, string> = {
+  'dark-red':      'linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%)',
   'purple-maroon': 'linear-gradient(135deg, #1a1020, #140010)',
   'teal-navy':     'linear-gradient(135deg, #0f1a20, #081018)',
   'deep-navy':     'linear-gradient(135deg, #0a1020, #060c18)',
@@ -65,7 +66,6 @@ const gradientStyle = gradient ? (GRADIENTS[gradient] ?? gradient) : undefined;
       <a
         href={`/apply?program=${encodeURIComponent(program)}`}
         class="btn btn-secondary card-cta"
-        style={gradientStyle ? `background: ${gradientStyle}` : undefined}
       >Inquire</a>
       {!inquireOnly && <a href={stripeUrl} class="btn btn-primary card-cta">Join Now</a>}
     </div>

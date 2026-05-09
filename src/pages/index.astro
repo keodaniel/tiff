@@ -30,9 +30,9 @@ try {
 
 const slides = [
   { label: 'Home', slide: 0 },
-  { label: 'Promo Codes', slide: 1 },
-  { label: 'View Memberships', slide: 2 },
-  { label: 'Meet Coach Tiff', slide: 3 },
+  { label: 'View Memberships', slide: 1 },
+  { label: 'Promo Codes', slide: 2 },
+  { label: 'About Me', slide: 3 },
 ];
 ---
 
@@ -42,8 +42,8 @@ const slides = [
   <div class="slides-track">
     <div class="slides-inner" id="slides-inner">
       <HomeSlide eyebrow={homeCopy.eyebrow} clubName={homeCopy.clubName} />
-      <PromosSlide promos={promos} />
       <MembershipsSlide programs={programs} />
+      <PromosSlide promos={promos} />
       <AboutSlide />
     </div>
 

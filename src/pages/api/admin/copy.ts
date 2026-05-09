@@ -5,7 +5,7 @@ import { env } from 'cloudflare:workers';
 export const prerender = false;
 
 export const DEFAULT_COPY = {
-  eyebrow: 'Olympic Weightlifting + Military Strength & Conditioning Coach',
+  eyebrow: 'Olympic Weightlifting + Tactical Strength & Conditioning Coach',
   clubName: 'Tank Performance and Weightlifting',
 };
 

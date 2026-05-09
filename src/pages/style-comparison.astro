@@ -25,10 +25,13 @@ import '../styles/style-comparison.css';
         <div class="style-top-title">TankTiff Website Style Matrix</div>
 
         <nav class="style-jump-links" aria-label="Jump to comparison section">
+          <a href="#nav">Nav</a>
           <a href="#hero">Hero</a>
           <a href="#card">Program Card</a>
           <a href="#workout">Workout</a>
           <a href="#form">Form/Input</a>
+          <a href="#promo">Promo</a>
+          <a href="#about">About</a>
         </nav>
       </div>
     </header>
@@ -43,16 +46,89 @@ import '../styles/style-comparison.css';
       <p>
         Compare the same components across two typography choices.
         All variants use DM Mono for metadata, labels, badges, and tactical data.
+        "Current Site" panels show the live implementation.
       </p>
     </section>
 
     <main class="comparison-layout">
 
+      <!-- NAV -->
+      <section id="nav" class="comparison-row">
+        <div class="comparison-row-label">00 — Navigation</div>
+
+        <div class="comparison-columns">
+          <article class="style-panel red-theme outfit-theme">
+            <div class="style-panel-header">
+              <div class="style-name">Mobile — Collapsed + Expanded</div>
+              <div class="style-stack">Current Implementation</div>
+            </div>
+            <div class="style-panel-body" style="padding:0; overflow:hidden;">
+              <div class="demo-nav-bar">
+                <img class="demo-nav-logo-img" src="/tpc_logo_red_no_bg.png" alt="Tank Performance and Weightlifting logo" />
+                <div class="demo-nav-hamburger">
+                  <div class="demo-nav-bar-line"></div>
+                  <div class="demo-nav-bar-line"></div>
+                  <div class="demo-nav-bar-line"></div>
+                </div>
+              </div>
+              <div class="demo-nav-dropdown">
+                <div class="demo-nav-item">Home</div>
+                <div class="demo-nav-item">Promo Codes</div>
+                <div class="demo-nav-item">Memberships</div>
+                <div class="demo-nav-item">About Coach Tiff</div>
+                <div class="demo-nav-item demo-nav-item--shop">Shop ↗</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="style-panel red-theme outfit-theme">
+            <div class="style-panel-header">
+              <div class="style-name">Desktop — Inline Links</div>
+              <div class="style-stack">Current Implementation</div>
+            </div>
+            <div class="style-panel-body" style="padding:0; overflow:hidden;">
+              <div class="demo-desktop-nav">
+                <img class="demo-nav-logo-img" src="/tpc_logo_red_no_bg.png" alt="Tank Performance and Weightlifting logo" />
+                <div class="demo-desktop-links">
+                  <div class="demo-desktop-link">Home</div>
+                  <div class="demo-desktop-link">Promos</div>
+                  <div class="demo-desktop-link">Memberships</div>
+                  <div class="demo-desktop-link">About</div>
+                  <div class="demo-desktop-link demo-desktop-link--shop">Shop ↗</div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <!-- HERO -->
       <section id="hero" class="comparison-row">
         <div class="comparison-row-label">01 — Hero Block</div>
 
-        <div class="comparison-columns">
+        <div class="comparison-columns comparison-columns--3">
+          <article class="style-panel current-theme">
+            <div class="style-panel-header">
+              <div class="style-name">Current Site</div>
+              <div class="style-stack">Outfit + Plus Jakarta Sans · Live</div>
+            </div>
+            <div class="style-panel-body">
+              <div class="demo-hero-wrap">
+                <div class="demo-hero-photo-ring">
+                  <img class="demo-hero-photo" src="/tiff_profile.png" alt="Coach Tiff" />
+                </div>
+                <p class="demo-hero-eyebrow">Olympic Weightlifting + Military Strength Coach</p>
+                <h2 class="demo-hero-name">Coach Tiff</h2>
+                <p class="demo-hero-club">Tank Performance and Weightlifting</p>
+                <div class="demo-hero-btns">
+                  <button class="demo-btn-full">Promo Codes</button>
+                  <button class="demo-btn-full">View Memberships</button>
+                  <button class="demo-btn-full">About Me</button>
+                </div>
+              </div>
+            </div>
+          </article>
+
           <article class="style-panel red-theme outfit-theme">
             <div class="style-panel-header">
               <div class="style-name">Red Tactical / Outfit</div>
@@ -91,7 +167,34 @@ import '../styles/style-comparison.css';
       <section id="card" class="comparison-row">
         <div class="comparison-row-label">02 — Program Card</div>
 
-        <div class="comparison-columns">
+        <div class="comparison-columns comparison-columns--3">
+          <article class="style-panel current-theme">
+            <div class="style-panel-header">
+              <div class="style-name">Current Site — ShopCard</div>
+              <div class="style-stack">Outfit + Plus Jakarta Sans · Live</div>
+            </div>
+            <div class="style-panel-body">
+              <div class="demo-shop-card">
+                <div class="demo-card-banner">
+                  <p class="demo-card-tag">Course</p>
+                  <h3 class="demo-shop-title">Foundational Strength 1</h3>
+                </div>
+                <div class="demo-card-body">
+                  <div class="demo-card-price">
+                    <span class="demo-card-price-amount">$49</span>
+                    <span class="demo-card-price-period">one time</span>
+                  </div>
+                  <ul class="demo-features" role="list">
+                    <li class="demo-feature-item"><span class="demo-feature-check" aria-hidden="true">✓</span><span>6-week Olympic lifting and strength cycle</span></li>
+                    <li class="demo-feature-item"><span class="demo-feature-check" aria-hidden="true">✓</span><span>3 training days per week</span></li>
+                    <li class="demo-feature-item"><span class="demo-feature-check" aria-hidden="true">✓</span><span>Beginner-friendly programming</span></li>
+                  </ul>
+                  <a href="#" class="btn-primary">Sign Up Now</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
           <article class="style-panel red-theme outfit-theme">
             <div class="style-panel-header">
               <div class="style-name">Red Tactical / Outfit</div>
@@ -223,6 +326,107 @@ import '../styles/style-comparison.css';
               </div>
             </div>
           </article>
+        </div>
+      </section>
+
+      <!-- PROMO CARD -->
+      <section id="promo" class="comparison-row">
+        <div class="comparison-row-label">05 — Promo Card</div>
+
+        <div class="comparison-columns">
+          <article class="style-panel red-theme outfit-theme">
+            <div class="style-panel-header">
+              <div class="style-name">Red Tactical / Outfit</div>
+              <div class="style-stack">Outfit + DM Mono</div>
+            </div>
+            <div class="style-panel-body">
+              <div class="demo-promo-card">
+                <span class="demo-promo-brand">Barbell Apparel</span>
+                <p class="demo-promo-label">Performance athletic wear engineered for Olympic weightlifting. Use code for 15% off your entire order.</p>
+                <div class="demo-promo-code-row">
+                  <span class="demo-promo-code">COACHTIFF15</span>
+                  <button class="demo-promo-copy-btn">Copy</button>
+                </div>
+                <a href="#" class="demo-promo-shop-link">Shop Now ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="style-panel red-theme bebas-theme">
+            <div class="style-panel-header">
+              <div class="style-name">Red Tactical / Bebas</div>
+              <div class="style-stack">Bebas Neue + DM Mono</div>
+            </div>
+            <div class="style-panel-body">
+              <div class="demo-promo-card">
+                <span class="demo-promo-brand">Barbell Apparel</span>
+                <p class="demo-promo-label">Performance athletic wear engineered for Olympic weightlifting. Use code for 15% off your entire order.</p>
+                <div class="demo-promo-code-row">
+                  <span class="demo-promo-code">COACHTIFF15</span>
+                  <button class="demo-promo-copy-btn">Copy</button>
+                </div>
+                <a href="#" class="demo-promo-shop-link">Shop Now ↗</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ABOUT + CREDENTIALS -->
+      <section id="about" class="comparison-row">
+        <div class="comparison-row-label">06 — About + Credentials</div>
+
+        <div class="comparison-columns">
+          <article class="style-panel red-theme outfit-theme">
+            <div class="style-panel-header">
+              <div class="style-name">Red Tactical / Outfit</div>
+              <div class="style-stack">Outfit + DM Mono</div>
+            </div>
+            <div class="style-panel-body">
+              <div class="demo-about-layout">
+                <div>
+                  <h2 class="demo-section-heading">Meet Coach Tiff</h2>
+                  <p class="demo-about-text">Coach Tiff is a USA Weightlifting Level 2 Coach and national medalist with six years of competitive lifting and four years as a dedicated coach, helping athletes at all levels build strength, confidence, and consistency.</p>
+                </div>
+                <aside class="demo-credentials-badge">
+                  <h3 class="demo-credentials-title">Credentials</h3>
+                  <ul class="demo-credentials-list" role="list">
+                    <li class="demo-credentials-item"><span class="demo-credentials-icon" aria-hidden="true">◆</span><span>USAW Level 2 Coach</span></li>
+                    <li class="demo-credentials-item"><span class="demo-credentials-icon" aria-hidden="true">◆</span><span>National Medalist</span></li>
+                    <li class="demo-credentials-item"><span class="demo-credentials-icon" aria-hidden="true">◆</span><span>6 Years Competitive Lifting</span></li>
+                    <li class="demo-credentials-item"><span class="demo-credentials-icon" aria-hidden="true">◆</span><span>15 Years Gymnastics Background</span></li>
+                  </ul>
+                </aside>
+              </div>
+            </div>
+          </article>
+
+          <article class="style-panel red-theme bebas-theme">
+            <div class="style-panel-header">
+              <div class="style-name">Red Tactical / Bebas</div>
+              <div class="style-stack">Bebas Neue + DM Mono</div>
+            </div>
+            <div class="style-panel-body">
+              <div class="demo-about-layout">
+                <div>
+                  <h2 class="demo-section-heading">Meet Coach Tiff</h2>
+                  <p class="demo-about-text">Coach Tiff is a USA Weightlifting Level 2 Coach and national medalist with six years of competitive lifting and four years as a dedicated coach, helping athletes at all levels build strength, confidence, and consistency.</p>
+                </div>
+                <aside class="demo-credentials-badge">
+                  <h3 class="demo-credentials-title">Credentials</h3>
+                  <ul class="demo-credentials-list" role="list">
+                    <li class="demo-credentials-item"><span class="demo-credentials-icon" aria-hidden="true">◆</span><span>USAW Level 2 Coach</span></li>
+                    <li class="demo-credentials-item"><span class="demo-credentials-icon" aria-hidden="true">◆</span><span>National Medalist</span></li>
+                    <li class="demo-credentials-item"><span class="demo-credentials-icon" aria-hidden="true">◆</span><span>6 Years Competitive Lifting</span></li>
+                    <li class="demo-credentials-item"><span class="demo-credentials-icon" aria-hidden="true">◆</span><span>15 Years Gymnastics Background</span></li>
+                  </ul>
+                </aside>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
     </main>
   </body>
 </html>
