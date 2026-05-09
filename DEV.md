@@ -1,15 +1,25 @@
 # Local Dev & Mobile Preview
 
-Running the dev server from WSL with phone testing over WiFi requires two steps: start Astro bound to all interfaces, then forward the port from Windows to WSL.
-
-## 1. Start the dev server (WSL)
+## Daily workflow
 
 ```bash
-cd /mnt/c/WSD/Projects/tiff
-npm run dev -- --host
+npm run dev -- --host   # visual/component work — HMR, no rebuild needed
+npm run preview         # Cloudflare testing (admin, KV, env vars) — requires full rebuild
 ```
 
-`--host` binds Astro to `0.0.0.0:4321` instead of localhost only.
+`npm run dev` binds Astro to `0.0.0.0:4321` with `--host`. Skip `--host` if you only need localhost.
+
+---
+
+## Viewing on mobile (WSL + WiFi)
+
+Running from WSL requires forwarding the port from Windows to WSL so your phone can reach it.
+
+### 1. Start the dev server (WSL)
+
+```bash
+npm run dev -- --host
+```
 
 Note the WSL IP Astro prints, or grab it manually:
 
@@ -18,7 +28,7 @@ ip addr show eth0 | grep 'inet '
 # → inet 172.x.x.x/20 ...
 ```
 
-## 2. Forward the port (PowerShell — run as Administrator)
+### 2. Forward the port (PowerShell — run as Administrator)
 
 Replace `<WSL_IP>` with the address from step 1:
 
@@ -35,21 +45,23 @@ ipconfig
 # look for IPv4 Address under your WiFi adapter → 192.168.x.x
 ```
 
-## 3. Open on your phone
+### 3. Open on your phone
 
-Phone must be on the same WiFi network. Navigate to:
+Phone must be on the same WiFi network:
 
 ```
 http://<Windows_LAN_IP>:4321
 ```
 
-## Cleanup
+### Cleanup
 
-Remove the proxy rule when done (otherwise it persists across reboots):
+Remove the proxy rule when done (it persists across reboots):
 
 ```powershell
 netsh interface portproxy delete v4tov4 listenport=4321 listenaddress=0.0.0.0
 ```
+
+---
 
 ## Notes
 
@@ -60,3 +72,4 @@ netsh interface portproxy delete v4tov4 listenport=4321 listenaddress=0.0.0.0
   ```
   Remove it when done: `Remove-NetFirewallRule -DisplayName "Astro Dev"`
 - **View active proxy rules**: `netsh interface portproxy show all`
+- **Admin panel** needs `npm run preview` — KV and session secrets aren't available in `astro dev`.
