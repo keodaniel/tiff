@@ -26,25 +26,32 @@ const navLinks = [
       <a href="/admin" class="admin-logo-link">
         <img src="/tpc_logo_white_no_bg.png" alt="Tank Performance and Weightlifting" class="admin-logo" />
       </a>
-      <nav class="admin-nav" aria-label="Admin navigation">
-        {navLinks.map(link => {
-          const isActive = link.prefix ? path.startsWith(link.href) : path === link.href;
-          return (
-            <a
-              href={link.href}
-              class={`admin-nav-link${isActive ? ' is-active' : ''}`}
-              aria-current={isActive ? 'page' : undefined}
-            >
-              {link.label}
-            </a>
-          );
-        })}
-      </nav>
-      <div class="admin-header-actions">
-        <a href="/" class="btn btn-secondary admin-home-btn">← Back to Site</a>
-        <form method="POST" action="/api/admin/logout" class="admin-logout-form">
-          <button type="submit" class="btn btn-secondary admin-logout-btn">Log out</button>
-        </form>
+      <button class="admin-hamburger" id="admin-hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="admin-collapsible" id="admin-collapsible">
+        <nav class="admin-nav" aria-label="Admin navigation">
+          {navLinks.map(link => {
+            const isActive = link.prefix ? path.startsWith(link.href) : path === link.href;
+            return (
+              <a
+                href={link.href}
+                class={`admin-nav-link${isActive ? ' is-active' : ''}`}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {link.label}
+              </a>
+            );
+          })}
+        </nav>
+        <div class="admin-header-actions">
+          <a href="/" class="btn btn-secondary admin-home-btn">← Back to Site</a>
+          <form method="POST" action="/api/admin/logout" class="admin-logout-form">
+            <button type="submit" class="btn btn-secondary admin-logout-btn">Log out</button>
+          </form>
+        </div>
       </div>
     </div>
   </header>
@@ -52,3 +59,12 @@ const navLinks = [
     <slot />
   </main>
 </Base>
+
+<script>
+  const hamburger = document.getElementById('admin-hamburger');
+  const collapsible = document.getElementById('admin-collapsible');
+  hamburger?.addEventListener('click', () => {
+    const open = collapsible?.classList.toggle('is-open');
+    hamburger.setAttribute('aria-expanded', String(!!open));
+  });
+</script>

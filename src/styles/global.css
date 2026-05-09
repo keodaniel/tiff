@@ -573,6 +573,7 @@ button { font-family: inherit; }
   overflow: hidden;
   border: 3px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 0 0 6px rgba(204, 0, 0, 0.15);
+  align-self: center;
 }
 .about-photo { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .about-layout { display: flex; flex-direction: column; gap: 32px; margin-top: 32px; }
@@ -807,9 +808,10 @@ body.page-standalone {
   .section-heading { font-size: 2.4rem; }
   .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
   .form-submit { width: auto; padding: 14px 48px; }
-  .about-layout { flex-direction: row; gap: 48px; align-items: flex-start; }
-  .about-body { flex: 1; }
-  .about-sidebar { width: 280px; flex-shrink: 0; position: sticky; top: 80px; align-self: flex-start; }
+  .about-layout { display: grid; grid-template-columns: 1fr 280px; grid-template-areas: "body photo" "body creds"; gap: 48px; align-items: start; }
+  .about-body { grid-area: body; }
+  .about-photo-wrap { grid-area: photo; }
+  .credentials-badge { grid-area: creds; position: sticky; top: 80px; }
   .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
   .checkout-layout { flex-direction: row; align-items: flex-start; gap: 36px; }
   .checkout-summary { flex: 0 0 300px; position: sticky; top: 80px; }
@@ -1064,6 +1066,9 @@ body.page-admin-login {
 .admin-header-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
 .admin-logout-form { flex-shrink: 0; }
 .admin-logout-btn, .admin-home-btn { padding: 6px 14px; font-size: 0.8rem; width: auto; }
+.admin-collapsible { display: flex; flex: 1; align-items: center; gap: 16px; }
+.admin-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; margin-left: auto; flex-shrink: 0; }
+.admin-hamburger span { display: block; width: 20px; height: 2px; background: var(--color-text-light); border-radius: 1px; }
 
 /* ── Admin main ── */
 .admin-main {
@@ -1245,6 +1250,17 @@ body.page-admin-login {
 }
 @media (max-width: 640px) {
   .admin-edit-row { grid-template-columns: 1fr; }
+  .nav-logo-img { height: 35px; }
+  .hero-name { font-size: 1.9rem; }
+  .hero-club { font-size: 0.72rem; }
+  .admin-hamburger { display: flex; }
+  .admin-collapsible { display: none; position: absolute; top: 60px; left: 0; right: 0; flex-direction: column; background: #0a0a0a; border-bottom: 1px solid rgba(204,0,0,0.3); z-index: 99; }
+  .admin-collapsible.is-open { display: flex; }
+  .admin-nav { flex-direction: column; width: 100%; gap: 0; }
+  .admin-nav-link { padding: 14px 20px; border-radius: 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+  .admin-header-actions { flex-direction: column; width: 100%; padding: 12px 16px; gap: 8px; margin-left: 0; }
+  .admin-home-btn, .admin-logout-btn { width: 100%; justify-content: center; text-align: center; }
+  .admin-logout-form { width: 100%; }
 }
 .admin-edit-actions {
   display: flex;
