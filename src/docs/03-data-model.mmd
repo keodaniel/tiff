@@ -5,36 +5,32 @@ erDiagram
     SITE_DATA ||--|| FLAGS : "flags:all"
     SITE_DATA ||--o{ SUBMISSION : "submissions:id"
 
-    SITE_DATA {
-        string binding "Cloudflare KV namespace"
-    }
-
     PROGRAM {
-        string id "e.g. oly-remote"
-        string tag "Remote or In-Person"
-        string title "display name"
-        string program "e.g. Olympic Weightlifting"
-        number price "monthly USD"
-        string gradient "purple-maroon, forest, deep-navy, teal-navy, maroon"
-        string stripeUrl "buy.stripe.com link"
+        string id
+        string tag
+        string title
+        string program
+        int price
+        string gradient
+        string stripeUrl
         boolean featured
-        boolean inquireOnly "hides price and join button"
-        string badges "JSON array - e.g. Most Popular"
-        string features "JSON array of bullet points"
+        boolean inquireOnly
+        string badges
+        string features
     }
 
     PROMO {
         string id
-        string brand "e.g. Legion Athletics"
-        string code "auto-uppercased"
+        string brand
+        string code
         string shopUrl
         string description
-        string usage "instructions for user"
+        string usage
     }
 
     COPY_HOME {
-        string eyebrow "text below logo on hero slide"
-        string clubName "e.g. Tank Performance and Weightlifting"
+        string eyebrow
+        string clubName
     }
 
     FLAGS {
@@ -45,12 +41,12 @@ erDiagram
     }
 
     SUBMISSION {
-        string id "timestamp-random6char"
-        string submittedAt "ISO 8601"
+        string id
+        string submittedAt
         string name
         string email
         string phone
-        string program_type "comma-separated selections"
+        string program_type
         string schedule
         string history
         string goals

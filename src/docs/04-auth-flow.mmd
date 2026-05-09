@@ -13,28 +13,26 @@ sequenceDiagram
         LP-->>U: Show password form
     end
 
-    U->>API: POST password field
+    U->>API: POST password
     API->>Auth: checkPassword(input, env.ADMIN_PASSWORD)
-    note over Auth: Simple string equality, no hashing
+    note over Auth: Simple string equality
     alt Wrong password
-        API-->>U: 302 to /admin/login?error=1
+        API-->>U: 302 to /admin/login with error
     else Correct password
         API->>Auth: signSession(env.SESSION_SECRET)
-        note over Auth: HMAC-SHA256 signed token with iat timestamp
+        note over Auth: HMAC-SHA256 signed token
         note over Auth: token = base64url(payload).signature
-        Auth-->>API: signed token string
-        API-->>U: Set-Cookie admin_session=token HttpOnly Secure 24hr
+        Auth-->>API: signed token
+        API-->>U: Set-Cookie admin_session HttpOnly Secure 24hr
         API-->>U: 302 to /admin
     end
 
-    note over U,MW: Every subsequent /admin/* request
-
-    U->>MW: GET /admin/* with cookie
+    U->>MW: GET /admin with cookie
     MW->>Auth: verifySession(token, env.SESSION_SECRET)
-    note over Auth: Split at last dot, recompute HMAC, compare
-    note over Auth: Decode iat, verify iat + 86400 is after now
-    alt Signature mismatch or expired
+    note over MW: Checks HMAC signature
+    note over MW: Checks iat within 24hr window
+    alt Invalid or expired
         MW-->>U: 302 to /admin/login
-    else Valid session
+    else Valid
         MW-->>U: Render admin page
     end
