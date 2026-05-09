@@ -1,6 +1,12 @@
 ---
 import PromoCard from '../PromoCard.astro';
-import promos from '../../data/promos.json';
+import type staticPromos from '../../data/promos.json';
+
+interface Props {
+  promos: typeof staticPromos;
+}
+
+const { promos } = Astro.props;
 ---
 
 <div class="slide">

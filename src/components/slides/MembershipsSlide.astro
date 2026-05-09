@@ -1,6 +1,12 @@
 ---
 import ProgramCard from '../ProgramCard.astro';
-import programs from '../../data/programs.json';
+import type staticPrograms from '../../data/programs.json';
+
+interface Props {
+  programs: typeof staticPrograms;
+}
+
+const { programs } = Astro.props;
 ---
 
 <div class="slide">

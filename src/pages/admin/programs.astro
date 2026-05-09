@@ -1,0 +1,302 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import staticPrograms from '../../data/programs.json';
+import { env } from 'cloudflare:workers';
+
+let programs = staticPrograms as any[];
+try {
+  const raw = await env.SITE_DATA.get('programs:list');
+  if (raw) programs = JSON.parse(raw);
+} catch {}
+
+const gradients = ['purple-maroon', 'forest', 'deep-navy', 'teal-navy', 'maroon'];
+---
+
+<AdminLayout title="Programs">
+  <div class="admin-section-header">
+    <h1 class="admin-page-title">Programs</h1>
+    <button id="add-btn" class="btn btn-primary admin-action-btn">Add Program</button>
+  </div>
+
+  <div id="add-form-container" hidden>
+    <form id="add-form" class="admin-edit-form" data-mode="add">
+      <h2 class="admin-form-title">New Program</h2>
+      <div class="admin-edit-row">
+        <div class="form-group">
+          <label class="form-label" for="add-id">ID (URL-safe slug)</label>
+          <input class="form-input" type="text" id="add-id" name="id" required pattern="[a-z0-9\-]+" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="add-tag">Tag</label>
+          <input class="form-input" type="text" id="add-tag" name="tag" placeholder="Remote" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="add-title">Title</label>
+        <input class="form-input" type="text" id="add-title" name="title" required />
+      </div>
+      <div class="admin-edit-row">
+        <div class="form-group">
+          <label class="form-label" for="add-program">Program Type</label>
+          <input class="form-input" type="text" id="add-program" name="program" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="add-price">Price ($/mo)</label>
+          <input class="form-input" type="number" id="add-price" name="price" required />
+        </div>
+      </div>
+      <div class="admin-edit-row">
+        <div class="form-group">
+          <label class="form-label" for="add-gradient">Gradient</label>
+          <select class="form-input" id="add-gradient" name="gradient">
+            {gradients.map(g => <option value={g}>{g}</option>)}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="add-stripe">Stripe URL (optional)</label>
+          <input class="form-input" type="url" id="add-stripe" name="stripeUrl" placeholder="https://buy.stripe.com/..." />
+        </div>
+      </div>
+      <div class="admin-edit-row">
+        <label class="admin-checkbox-label">
+          <input type="checkbox" name="featured" /> Featured
+        </label>
+        <label class="admin-checkbox-label">
+          <input type="checkbox" name="inquireOnly" /> Inquire Only
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="add-badges">Badges (comma-separated)</label>
+        <input class="form-input" type="text" id="add-badges" name="badges" placeholder="Most Popular" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="add-features">Features (one per line)</label>
+        <textarea class="form-input admin-textarea" id="add-features" name="features" rows="4"></textarea>
+      </div>
+      <div class="admin-edit-actions">
+        <button type="submit" class="btn btn-primary">Save Program</button>
+        <button type="button" id="add-cancel" class="btn btn-secondary">Cancel</button>
+      </div>
+      <p class="admin-save-status" hidden></p>
+    </form>
+  </div>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Tag</th>
+        <th>Price</th>
+        <th>Featured</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="programs-tbody">
+      {programs.map((p: any) => (
+        <tr data-id={p.id}>
+          <td>{p.title}</td>
+          <td>{p.tag}</td>
+          <td>${p.price}/{p.period ?? 'month'}</td>
+          <td>{p.featured ? 'Yes' : 'No'}</td>
+          <td>
+            <button class="btn btn-secondary admin-table-action edit-btn" data-program={JSON.stringify(p)}>Edit</button>
+            <button class="btn btn-secondary admin-table-action delete-btn" data-id={p.id}>Delete</button>
+          </td>
+        </tr>
+        <tr class="edit-row" id={`edit-row-${p.id}`} hidden>
+          <td colspan="5">
+            <form class="admin-edit-form edit-form" data-id={p.id}>
+              <div class="admin-edit-row">
+                <div class="form-group">
+                  <label class="form-label">ID</label>
+                  <input class="form-input" type="text" name="id" value={p.id} readonly />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Tag</label>
+                  <input class="form-input" type="text" name="tag" value={p.tag} required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Title</label>
+                <input class="form-input" type="text" name="title" value={p.title} required />
+              </div>
+              <div class="admin-edit-row">
+                <div class="form-group">
+                  <label class="form-label">Program Type</label>
+                  <input class="form-input" type="text" name="program" value={p.program} required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Price</label>
+                  <input class="form-input" type="number" name="price" value={p.price} required />
+                </div>
+              </div>
+              <div class="admin-edit-row">
+                <div class="form-group">
+                  <label class="form-label">Gradient</label>
+                  <select class="form-input" name="gradient">
+                    {gradients.map(g => <option value={g} selected={g === p.gradient}>{g}</option>)}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Stripe URL</label>
+                  <input class="form-input" type="url" name="stripeUrl" value={p.stripeUrl ?? ''} />
+                </div>
+              </div>
+              <div class="admin-edit-row">
+                <label class="admin-checkbox-label">
+                  <input type="checkbox" name="featured" checked={p.featured} /> Featured
+                </label>
+                <label class="admin-checkbox-label">
+                  <input type="checkbox" name="inquireOnly" checked={p.inquireOnly} /> Inquire Only
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Badges (comma-separated)</label>
+                <input class="form-input" type="text" name="badges" value={(p.badges ?? []).join(', ')} />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Features (one per line)</label>
+                <textarea class="form-input admin-textarea" name="features" rows="4">{(p.features ?? []).map((f: any) => f.text).join('\n')}</textarea>
+              </div>
+              <div class="admin-edit-actions">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary cancel-edit-btn" data-id={p.id}>Cancel</button>
+              </div>
+              <p class="admin-save-status" hidden></p>
+            </form>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</AdminLayout>
+
+<script>
+  // Current programs state (loaded from server render)
+  let programs: any[] = Array.from(
+    document.querySelectorAll<HTMLTableRowElement>('#programs-tbody tr[data-id]')
+  ).map(row => {
+    const editBtn = row.querySelector<HTMLButtonElement>('.edit-btn');
+    return editBtn ? JSON.parse(editBtn.dataset.program ?? '{}') : null;
+  }).filter(Boolean);
+
+  async function saveAll(updated: any[]) {
+    const res = await fetch('/api/admin/programs', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated),
+    });
+    return res.ok;
+  }
+
+  function formToProgram(form: HTMLFormElement, existing?: any): any {
+    const d = new FormData(form);
+    const featuresRaw = (d.get('features') as string) ?? '';
+    const badgesRaw = (d.get('badges') as string) ?? '';
+    return {
+      ...(existing ?? {}),
+      id: (d.get('id') as string).trim(),
+      tag: (d.get('tag') as string).trim(),
+      title: (d.get('title') as string).trim(),
+      program: (d.get('program') as string).trim(),
+      price: Number(d.get('price')),
+      period: existing?.period ?? 'month',
+      featured: form.querySelector<HTMLInputElement>('input[name="featured"]')?.checked ?? false,
+      inquireOnly: form.querySelector<HTMLInputElement>('input[name="inquireOnly"]')?.checked ?? false,
+      gradient: (d.get('gradient') as string),
+      ctaStyle: existing?.ctaStyle ?? 'primary',
+      stripeUrl: (d.get('stripeUrl') as string).trim() || undefined,
+      badges: badgesRaw.split(',').map(s => s.trim()).filter(Boolean),
+      features: featuresRaw.split('\n').map(s => s.trim()).filter(Boolean).map(text => ({ text })),
+    };
+  }
+
+  function showStatus(form: HTMLFormElement, ok: boolean) {
+    const p = form.querySelector<HTMLElement>('.admin-save-status');
+    if (!p) return;
+    p.textContent = ok ? 'Saved.' : 'Save failed. Please try again.';
+    p.className = `admin-save-status ${ok ? 'is-success' : 'is-error'}`;
+    p.hidden = false;
+    setTimeout(() => { p.hidden = true; }, 3000);
+  }
+
+  // Edit inline forms
+  document.querySelectorAll<HTMLButtonElement>('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.closest('tr')?.dataset.id;
+      if (!id) return;
+      document.getElementById(`edit-row-${id}`)?.removeAttribute('hidden');
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.cancel-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById(`edit-row-${btn.dataset.id}`)?.setAttribute('hidden', '');
+    });
+  });
+
+  document.querySelectorAll<HTMLFormElement>('.edit-form').forEach(form => {
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const id = form.dataset.id;
+      const existing = programs.find(p => p.id === id);
+      const updated = formToProgram(form, existing);
+      const newList = programs.map(p => p.id === id ? updated : p);
+      const ok = await saveAll(newList);
+      if (ok) {
+        programs = newList;
+        document.getElementById(`edit-row-${id}`)?.setAttribute('hidden', '');
+      }
+      showStatus(form, ok);
+    });
+  });
+
+  // Delete
+  document.querySelectorAll<HTMLButtonElement>('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Delete this program?')) return;
+      const id = btn.dataset.id;
+      const newList = programs.filter(p => p.id !== id);
+      const ok = await saveAll(newList);
+      if (ok) {
+        programs = newList;
+        btn.closest('tr')?.remove();
+        document.getElementById(`edit-row-${id}`)?.remove();
+      } else {
+        alert('Delete failed. Please try again.');
+      }
+    });
+  });
+
+  // Add new program
+  const addBtn = document.getElementById('add-btn');
+  const addFormContainer = document.getElementById('add-form-container');
+  const addForm = document.getElementById('add-form') as HTMLFormElement;
+  const addCancel = document.getElementById('add-cancel');
+
+  addBtn?.addEventListener('click', () => {
+    addFormContainer?.removeAttribute('hidden');
+    addBtn.setAttribute('hidden', '');
+  });
+
+  addCancel?.addEventListener('click', () => {
+    addFormContainer?.setAttribute('hidden', '');
+    addBtn?.removeAttribute('hidden');
+    addForm?.reset();
+  });
+
+  addForm?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const newProgram = formToProgram(addForm);
+    const newList = [...programs, newProgram];
+    const ok = await saveAll(newList);
+    if (ok) {
+      programs = newList;
+      showStatus(addForm, true);
+      setTimeout(() => location.reload(), 1000);
+    } else {
+      showStatus(addForm, false);
+    }
+  });
+</script>

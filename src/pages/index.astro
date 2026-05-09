@@ -1,10 +1,32 @@
 ---
+export const prerender = false;
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import HomeSlide from '../components/slides/HomeSlide.astro';
 import PromosSlide from '../components/slides/PromosSlide.astro';
 import MembershipsSlide from '../components/slides/MembershipsSlide.astro';
 import AboutSlide from '../components/slides/AboutSlide.astro';
+import staticPrograms from '../data/programs.json';
+import staticPromos from '../data/promos.json';
+import { env } from 'cloudflare:workers';
+
+import { DEFAULT_COPY } from './api/admin/copy';
+
+let programs = staticPrograms as typeof staticPrograms;
+let promos = staticPromos as typeof staticPromos;
+let homeCopy = { ...DEFAULT_COPY };
+try {
+  const pr = await env.SITE_DATA.get('programs:list');
+  if (pr) programs = JSON.parse(pr);
+} catch {}
+try {
+  const po = await env.SITE_DATA.get('promos:list');
+  if (po) promos = JSON.parse(po);
+} catch {}
+try {
+  const co = await env.SITE_DATA.get('copy:home');
+  if (co) homeCopy = { ...DEFAULT_COPY, ...JSON.parse(co) };
+} catch {}
 
 const navLinks = [
   { label: 'Home', slide: 0 },
@@ -26,9 +48,9 @@ const slideDots = [
 
   <div class="slides-track">
     <div class="slides-inner" id="slides-inner">
-      <HomeSlide />
-      <PromosSlide />
-      <MembershipsSlide />
+      <HomeSlide eyebrow={homeCopy.eyebrow} clubName={homeCopy.clubName} />
+      <PromosSlide promos={promos} />
+      <MembershipsSlide programs={programs} />
       <AboutSlide />
     </div>
 

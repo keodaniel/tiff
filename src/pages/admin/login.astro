@@ -1,0 +1,46 @@
+---
+export const prerender = false;
+import Base from '../../layouts/Base.astro';
+import { verifySession } from '../../lib/auth';
+import { env } from 'cloudflare:workers';
+
+const sessionMatch = /admin_session=([^;]+)/.exec(
+  Astro.request.headers.get('cookie') ?? ''
+);
+if (sessionMatch) {
+  try {
+    if (await verifySession(sessionMatch[1], env.SESSION_SECRET)) {
+      return Astro.redirect('/admin', 302);
+    }
+  } catch {}
+}
+
+const hasError = Astro.url.searchParams.has('error');
+---
+
+<Base title="Admin Login" bodyClass="page-admin-login">
+  <div class="admin-login-page">
+    <div class="admin-login-card">
+      <img src="/tank_perf_wl_logo.jpg" alt="Tank Performance and Weightlifting" class="admin-login-logo" />
+      <h1 class="admin-login-heading">Admin Login</h1>
+      {hasError && (
+        <div class="admin-login-error" role="alert">Incorrect password. Please try again.</div>
+      )}
+      <form method="POST" action="/api/admin/login" class="admin-login-form">
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input
+            class="form-input"
+            type="password"
+            id="password"
+            name="password"
+            autocomplete="current-password"
+            required
+            autofocus
+          />
+        </div>
+        <button type="submit" class="btn btn-primary admin-login-submit">Log In</button>
+      </form>
+    </div>
+  </div>
+</Base>

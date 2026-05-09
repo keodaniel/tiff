@@ -210,7 +210,10 @@ import Base from '../layouts/Base.astro';
     formData.set('program_type', programLines);
 
     try {
-      const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData });
+      const [res] = await Promise.all([
+        fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData }),
+        fetch('/api/submit-application', { method: 'POST', body: formData }).catch(() => null),
+      ]);
       const json = await res.json();
       if (!res.ok || !json.success) throw new Error(json.message ?? 'Submission failed');
       form.setAttribute('hidden', '');

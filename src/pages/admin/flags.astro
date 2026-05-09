@@ -1,0 +1,85 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { env } from 'cloudflare:workers';
+
+const DEFAULT_FLAGS = {
+  shopEnabled: false,
+  cartEnabled: false,
+  promoCodesEnabled: true,
+  applyFormEnabled: true,
+};
+
+let flags = { ...DEFAULT_FLAGS };
+try {
+  const raw = await env.SITE_DATA.get('flags:all');
+  if (raw) flags = { ...DEFAULT_FLAGS, ...JSON.parse(raw) };
+} catch {}
+
+const flagMeta: Record<string, { label: string; desc: string }> = {
+  shopEnabled: { label: 'Shop', desc: 'Show the shop slide and navigation link' },
+  cartEnabled: { label: 'Cart', desc: 'Enable the cart and checkout flow' },
+  promoCodesEnabled: { label: 'Promo Codes', desc: 'Show the promo codes slide' },
+  applyFormEnabled: { label: 'Apply Form', desc: 'Show the coaching application form' },
+};
+---
+
+<AdminLayout title="Feature Flags">
+  <h1 class="admin-page-title">Feature Flags</h1>
+  <ul class="admin-flag-list" id="flag-list">
+    {Object.entries(flags).map(([key, value]) => {
+      const meta = flagMeta[key] ?? { label: key, desc: '' };
+      return (
+        <li class="admin-flag-item" data-key={key}>
+          <div class="admin-flag-info">
+            <div class="admin-flag-label">{meta.label}</div>
+            {meta.desc && <div class="admin-flag-desc">{meta.desc}</div>}
+          </div>
+          <span class={`admin-flag-badge ${value ? 'is-on' : 'is-off'}`} data-badge>
+            {value ? 'On' : 'Off'}
+          </span>
+          <button
+            class="btn btn-secondary admin-flag-toggle"
+            data-flag={key}
+            data-current={String(value)}
+          >
+            {value ? 'Turn Off' : 'Turn On'}
+          </button>
+        </li>
+      );
+    })}
+  </ul>
+  <p class="admin-flags-note">Changes take effect immediately on the live site.</p>
+</AdminLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.admin-flag-toggle').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const key = btn.dataset.flag!;
+      const current = btn.dataset.current === 'true';
+      const next = !current;
+
+      btn.disabled = true;
+      const res = await fetch('/api/admin/flags', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [key]: next }),
+      });
+
+      if (res.ok) {
+        btn.dataset.current = String(next);
+        btn.textContent = next ? 'Turn Off' : 'Turn On';
+        const item = btn.closest('.admin-flag-item');
+        const badge = item?.querySelector<HTMLElement>('[data-badge]');
+        if (badge) {
+          badge.textContent = next ? 'On' : 'Off';
+          badge.className = `admin-flag-badge ${next ? 'is-on' : 'is-off'}`;
+        }
+      } else {
+        alert('Failed to update flag. Please try again.');
+      }
+
+      btn.disabled = false;
+    });
+  });
+</script>
