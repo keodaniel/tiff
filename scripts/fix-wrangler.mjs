@@ -35,15 +35,21 @@ dedup('dist/server/.prerender/wrangler.json');
 
 // Generate root wrangler.json for Cloudflare Pages CI.
 // Pages reads this after the build, so dist/server/entry.mjs exists.
+// Only include fields CF needs — strip internal wrangler metadata fields
+// (configPath, userConfigPath, etc.) that contain local absolute paths
+// and would cause CI to fail when those paths don't exist.
 if (serverConfig) {
   const pagesConfig = {
-    ...serverConfig,
     name: 'tiff-epm',
+    compatibility_date: serverConfig.compatibility_date,
+    compatibility_flags: serverConfig.compatibility_flags,
     main: 'dist/server/entry.mjs',
     assets: {
-      ...serverConfig.assets,
       directory: './dist/client',
+      binding: 'ASSETS',
     },
+    kv_namespaces: serverConfig.kv_namespaces,
+    observability: serverConfig.observability,
   };
   writeFileSync('wrangler.json', JSON.stringify(pagesConfig, null, '\t'));
   console.log('[fix-wrangler] Wrote root wrangler.json for Cloudflare Pages CI');
