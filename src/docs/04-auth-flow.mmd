@@ -1,38 +1,38 @@
 sequenceDiagram
     participant U as User
-    participant LP as /admin/login
-    participant API as /api/admin/login
+    participant LP as admin/login page
+    participant API as api/admin/login
     participant Auth as lib/auth.ts
-    participant MW as middleware/index.ts
+    participant MW as middleware
 
     U->>LP: GET /admin/login
     LP->>Auth: verifySession(cookie, SESSION_SECRET)
     alt Already authenticated
-        LP-->>U: 302 → /admin
+        LP-->>U: 302 to /admin
+    else Not authenticated
+        LP-->>U: Show password form
     end
-    LP-->>U: Render password form
 
-    U->>API: POST /api/admin/login {password}
+    U->>API: POST password field
     API->>Auth: checkPassword(input, env.ADMIN_PASSWORD)
-    note over Auth: Simple string equality — no hashing
+    note over Auth: Simple string equality, no hashing
     alt Wrong password
-        API-->>U: 302 → /admin/login?error=1
+        API-->>U: 302 to /admin/login?error=1
+    else Correct password
+        API->>Auth: signSession(env.SESSION_SECRET)
+        note over Auth: payload = base64url(JSON iat timestamp)<br/>signature = HMAC-SHA256(payload, secret)<br/>token = payload.signature
+        Auth-->>API: signed token string
+        API-->>U: Set-Cookie admin_session=token, HttpOnly, Secure, 24hr
+        API-->>U: 302 to /admin
     end
-
-    API->>Auth: signSession(env.SESSION_SECRET)
-    note over Auth: payload = JSON {iat: now}\nEncoded as base64url\nSigned with HMAC-SHA256\nToken = payload.signature
-    Auth-->>API: signed token string
-
-    API-->>U: Set-Cookie: admin_session={token}
-    note over API: HttpOnly; Secure; SameSite=Strict\nPath=/; Max-Age=86400 (24 hr)
-    API-->>U: 302 → /admin
 
     note over U,MW: Every subsequent /admin/* request
 
-    U->>MW: GET /admin/* (cookie attached automatically)
+    U->>MW: GET /admin/* with cookie
     MW->>Auth: verifySession(token, env.SESSION_SECRET)
-    note over Auth: 1. Split token at last dot\n2. Recompute HMAC, compare\n3. Check iat + 86400 > now
+    note over Auth: 1. Split at last dot into payload and sig<br/>2. Recompute HMAC, compare signatures<br/>3. Decode iat, check iat + 86400 is after now
     alt Signature mismatch or expired
-        MW-->>U: 302 → /admin/login
+        MW-->>U: 302 to /admin/login
+    else Valid session
+        MW-->>U: Render admin page
     end
-    MW-->>U: Admin page rendered

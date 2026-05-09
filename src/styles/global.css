@@ -1368,12 +1368,21 @@ body.page-admin-login {
 .radius-sample { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .radius-box { width: 72px; height: 56px; background: var(--color-surface-3); border: 1px solid var(--color-border); }
 
-/* Architecture diagrams */
-.arch-section { margin-bottom: 56px; }
-.arch-section-header { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
-.arch-section-title { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-.arch-number { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: var(--color-accent); border-radius: 50%; font-size: 0.75rem; font-weight: 800; color: #fff; flex-shrink: 0; }
-.arch-file { font-size: 0.72rem; color: var(--color-text-dim); font-family: monospace; }
-.arch-section-desc { font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: 20px; max-width: 700px; line-height: 1.6; }
+/* Architecture diagrams — tab navigation */
+.arch-tab-bar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+.arch-tab { display: flex; align-items: center; gap: 7px; padding: 7px 14px; background: transparent; border: 1px solid var(--color-border); border-radius: var(--radius-pill); font-family: var(--font-body); font-size: 0.8rem; font-weight: 500; color: var(--color-text-muted); cursor: pointer; transition: var(--transition); }
+.arch-tab:hover { border-color: var(--color-accent); color: var(--color-text); }
+.arch-tab.is-active { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.arch-tab-num { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: rgba(255,255,255,0.15); border-radius: 50%; font-size: 0.65rem; font-weight: 800; flex-shrink: 0; }
+.arch-tab.is-active .arch-tab-num { background: rgba(255,255,255,0.25); }
+.arch-tab-label { white-space: nowrap; }
+
+.arch-panel.is-hidden { display: none; }
+.arch-panel-meta { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.arch-section-desc { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.6; flex: 1; min-width: 200px; }
+.arch-file { font-size: 0.72rem; color: var(--color-text-dim); font-family: monospace; white-space: nowrap; }
+.arch-panel-nav { display: flex; justify-content: space-between; margin-top: 16px; }
+.arch-nav-btn { font-size: 0.8rem; padding: 6px 14px; width: auto; }
+
 .mermaid-wrap { overflow-x: auto; background: #0d0d0d; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 24px; }
 .mermaid-wrap svg { max-width: 100%; }
