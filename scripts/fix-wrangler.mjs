@@ -10,7 +10,8 @@
 //    so `dist/server/entry.mjs` exists by the time it's referenced.
 //    Local wrangler dev/deploy redirect to dist/server/wrangler.json instead.
 
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, copyFileSync, mkdirSync, readdirSync, statSync, appendFileSync } from 'fs';
+import { join } from 'path';
 
 function dedup(path) {
   if (!existsSync(path)) return null;
@@ -30,27 +31,31 @@ function dedup(path) {
   return config;
 }
 
-const serverConfig = dedup('dist/server/wrangler.json');
+function copyDir(src, dest) {
+  mkdirSync(dest, { recursive: true });
+  for (const entry of readdirSync(src)) {
+    const srcPath = join(src, entry);
+    const destPath = join(dest, entry);
+    if (statSync(srcPath).isDirectory()) {
+      copyDir(srcPath, destPath);
+    } else {
+      copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+dedup('dist/server/wrangler.json');
 dedup('dist/server/.prerender/wrangler.json');
 
-// Generate root wrangler.json for Cloudflare Pages CI.
-// Pages reads this after the build, so dist/server/entry.mjs exists.
-// Only include fields CF needs — strip internal wrangler metadata fields
-// (configPath, userConfigPath, etc.) that contain local absolute paths
-// and would cause CI to fail when those paths don't exist.
-if (serverConfig) {
-  const pagesConfig = {
-    name: 'tiff-epm',
-    compatibility_date: serverConfig.compatibility_date,
-    compatibility_flags: serverConfig.compatibility_flags,
-    main: 'dist/server/entry.mjs',
-    assets: {
-      directory: './dist/client',
-      binding: 'ASSETS',
-    },
-    kv_namespaces: serverConfig.kv_namespaces,
-    observability: serverConfig.observability,
-  };
-  writeFileSync('wrangler.json', JSON.stringify(pagesConfig, null, '\t'));
-  console.log('[fix-wrangler] Wrote root wrangler.json for Cloudflare Pages CI');
+// Bundle server into dist/client/_w/ and create _worker.js.
+// CF Pages detects _worker.js in the output directory and runs it as the
+// Worker for all requests. The worker can import other files from the same
+// directory, so copying the server chunks alongside it keeps the relative
+// imports intact.
+// CF Pages build output directory must be set to "dist/client".
+if (existsSync('dist/server')) {
+  copyDir('dist/server', 'dist/client/_w');
+  writeFileSync('dist/client/_worker.js', `export { default } from './_w/entry.mjs';\n`);
+  appendFileSync('dist/client/.assetsignore', '_w/\n');
+  console.log('[fix-wrangler] Created dist/client/_worker.js for CF Pages deployment');
 }
