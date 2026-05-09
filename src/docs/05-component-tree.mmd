@@ -1,0 +1,29 @@
+graph TD
+    Base["Base.astro\nHTML shell · global.css · Google Fonts"]
+    AL["AdminLayout.astro\nSticky header · nav links · Site + Logout buttons"]
+
+    Base --> IndexPage["pages/index.astro\nSSR · 4-slide carousel\nReads programs, promos, copy from KV"]
+    Base --> ApplyPage["pages/apply.astro\nSSR · Coaching application form\nPOSTs to Web3Forms + /api/submit-application"]
+    Base --> ShopPage["pages/shop.astro\nSSR · Hidden, not linked in nav"]
+    Base --> CartPage["pages/cart.astro\nSSR · Hidden, not linked in nav"]
+    Base --> LoginPage["pages/admin/login.astro\nSSR · Password form"]
+
+    AL --> AdminDash["admin/index.astro\nDashboard · 6 quick-link cards\nShows live submission count + flag status"]
+    AL --> AdminPrograms["admin/programs.astro\nInline edit table · CRUD via PUT /api/admin/programs"]
+    AL --> AdminPromos["admin/promos.astro\nInline edit table · CRUD via PUT /api/admin/promos"]
+    AL --> AdminCopy["admin/copy.astro\nHero copy editor · PUT /api/admin/copy"]
+    AL --> AdminSubs["admin/submissions.astro\nRead-only · lists submissions:* from KV"]
+    AL --> AdminFlags["admin/flags.astro\nToggle switches · PUT /api/admin/flags"]
+    AL --> DevHub["admin/developers/index.astro\nHub · two cards"]
+    AL --> DevStyles["admin/developers/styles.astro\nDesign token reference"]
+    AL --> DevArch["admin/developers/architecture.astro\nMermaid diagrams"]
+
+    IndexPage --> Nav["Nav.astro\nHamburger + slide links"]
+    IndexPage --> HomeSlide["slides/HomeSlide.astro\nHero · eyebrow + clubName from KV copy:home"]
+    IndexPage --> PromosSlide["slides/PromosSlide.astro\nReads promos:list from KV"]
+    IndexPage --> MembershipsSlide["slides/MembershipsSlide.astro\nReads programs:list from KV"]
+    IndexPage --> AboutSlide["slides/AboutSlide.astro\nCoach Tiff bio + credentials"]
+
+    AboutSlide --> Footer["Footer.astro\nCopyright · Admin button"]
+    PromosSlide --> PromoCard["PromoCard.astro"]
+    MembershipsSlide --> ProgramCard["ProgramCard.astro"]

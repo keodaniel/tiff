@@ -1,0 +1,57 @@
+erDiagram
+    SITE_DATA ||--o{ PROGRAM : "key: programs:list"
+    SITE_DATA ||--o{ PROMO : "key: promos:list"
+    SITE_DATA ||--|| COPY_HOME : "key: copy:home"
+    SITE_DATA ||--|| FLAGS : "key: flags:all"
+    SITE_DATA ||--o{ SUBMISSION : "key: submissions:{id}"
+
+    SITE_DATA {
+        string key "Cloudflare KV namespace binding"
+    }
+
+    PROGRAM {
+        string id "e.g. oly-remote"
+        string tag "Remote or In-Person"
+        string title "display name"
+        string program "e.g. Olympic Weightlifting"
+        number price "monthly USD"
+        string gradient "purple-maroon, forest, deep-navy, teal-navy, maroon"
+        string stripeUrl "buy.stripe.com link"
+        boolean featured
+        boolean inquireOnly "hides price and join button"
+        array badges "e.g. Most Popular"
+        array features "bullet point list"
+    }
+
+    PROMO {
+        string id
+        string brand "e.g. Legion Athletics"
+        string code "auto-uppercased"
+        string shopUrl
+        string description
+        string usage "instructions for user"
+    }
+
+    COPY_HOME {
+        string eyebrow "text below logo on hero slide"
+        string clubName "e.g. Tank Performance and Weightlifting"
+    }
+
+    FLAGS {
+        boolean shopEnabled
+        boolean cartEnabled
+        boolean promoCodesEnabled
+        boolean applyFormEnabled
+    }
+
+    SUBMISSION {
+        string id "timestamp-random6char"
+        string submittedAt "ISO 8601"
+        string name
+        string email
+        string phone
+        string program_type "comma-separated selections"
+        string schedule
+        string history
+        string goals
+    }

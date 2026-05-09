@@ -1,0 +1,24 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Developers">
+  <h1 class="admin-page-title">Developer Tools</h1>
+  <div class="admin-dash-grid">
+    <a href="/admin/developers/styles" class="admin-dash-card dev-hub-card">
+      <div class="admin-dash-card-icon-text">◈</div>
+      <div class="admin-dash-card-body">
+        <div class="admin-dash-card-label">Style Reference</div>
+        <div class="admin-dash-card-desc">Colors, typography, spacing tokens, and component examples from global.css</div>
+      </div>
+    </a>
+    <a href="/admin/developers/architecture" class="admin-dash-card dev-hub-card">
+      <div class="admin-dash-card-icon-text">⬡</div>
+      <div class="admin-dash-card-body">
+        <div class="admin-dash-card-label">Architecture</div>
+        <div class="admin-dash-card-desc">Mermaid diagrams at 6 levels of abstraction — system, routing, data model, auth, components, build</div>
+      </div>
+    </a>
+  </div>
+</AdminLayout>

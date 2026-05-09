@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant B as Browser
+    participant CF as CF Pages
+    participant MW as middleware/index.ts
+    participant RT as Route Handler
+    participant KV as SITE_DATA KV
+
+    B->>CF: HTTP Request
+
+    alt Static asset (_astro/, images, fonts)
+        CF-->>B: Served directly from assets KV
+    end
+
+    CF->>MW: Non-asset request → Astro Worker
+
+    alt Path starts with /admin
+        MW->>MW: Parse admin_session cookie
+        MW->>MW: verifySession(token, SESSION_SECRET)
+        note over MW: HMAC-SHA256 check + 24hr expiry
+        alt Missing or invalid session
+            MW-->>B: 302 → /admin/login
+        else Valid session
+            MW->>RT: next(), locals.isAdmin = true
+        end
+    else Public path (/, /apply, /programs, etc.)
+        MW->>RT: next()
+    end
+
+    RT->>KV: env.SITE_DATA.get("programs:list")
+    KV-->>RT: JSON string or null
+    RT->>RT: Parse JSON, fallback to src/data/*.json
+
+    RT->>RT: Render Astro component tree
+    RT-->>B: HTML response

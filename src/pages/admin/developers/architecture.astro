@@ -1,0 +1,95 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import diag1 from '../../../docs/01-system-overview.mmd?raw';
+import diag2 from '../../../docs/02-request-flow.mmd?raw';
+import diag3 from '../../../docs/03-data-model.mmd?raw';
+import diag4 from '../../../docs/04-auth-flow.mmd?raw';
+import diag5 from '../../../docs/05-component-tree.mmd?raw';
+import diag6 from '../../../docs/06-build-pipeline.mmd?raw';
+
+const diagrams = [
+  {
+    number: 1,
+    title: 'System Overview',
+    desc: 'Bird\'s-eye view of the full stack — how code gets from GitHub to the browser via Cloudflare Pages CI, the SSR Worker, and the KV store.',
+    src: diag1,
+    file: 'src/docs/01-system-overview.mmd',
+  },
+  {
+    number: 2,
+    title: 'Request Flow',
+    desc: 'How a single HTTP request travels through the system — CF Pages → Astro Worker → Middleware (auth check) → Route Handler → KV read → HTML response.',
+    src: diag2,
+    file: 'src/docs/02-request-flow.mmd',
+  },
+  {
+    number: 3,
+    title: 'Data Model',
+    desc: 'Everything stored in Cloudflare KV (SITE_DATA namespace) — all keys, their shapes, and the relationships between them.',
+    src: diag3,
+    file: 'src/docs/03-data-model.mmd',
+  },
+  {
+    number: 4,
+    title: 'Authentication Flow',
+    desc: 'The full admin login cycle — from password form submission through HMAC-SHA256 session signing, cookie setting, and middleware verification on every protected request.',
+    src: diag4,
+    file: 'src/docs/04-auth-flow.mmd',
+  },
+  {
+    number: 5,
+    title: 'Component Tree',
+    desc: 'Every Astro component and page, showing which layouts wrap which pages and how the slide components nest under the home page.',
+    src: diag5,
+    file: 'src/docs/05-component-tree.mmd',
+  },
+  {
+    number: 6,
+    title: 'Build Pipeline',
+    desc: 'What happens when you run npm run build — astro build output, the three jobs in fix-wrangler.mjs, and how the result maps to the CF Pages deployment.',
+    src: diag6,
+    file: 'src/docs/06-build-pipeline.mmd',
+  },
+];
+---
+
+<AdminLayout title="Architecture">
+  <h1 class="admin-page-title">Architecture</h1>
+  <p class="dev-intro">Six Mermaid diagrams from high-level to low-level. Source files live in <code>src/docs/</code> — open any <code>.mmd</code> file in VS Code with the Mermaid extension to get an interactive preview.</p>
+
+  {diagrams.map(d => (
+    <section class="arch-section">
+      <div class="arch-section-header">
+        <h2 class="arch-section-title">
+          <span class="arch-number">{d.number}</span>
+          {d.title}
+        </h2>
+        <code class="arch-file">{d.file}</code>
+      </div>
+      <p class="arch-section-desc">{d.desc}</p>
+      <div class="mermaid-wrap">
+        <pre class="mermaid">{d.src}</pre>
+      </div>
+    </section>
+  ))}
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        background: '#0d0d0d',
+        primaryColor: '#1a0000',
+        primaryBorderColor: '#CC0000',
+        primaryTextColor: '#f0f0f0',
+        secondaryColor: '#1a1a1a',
+        tertiaryColor: '#222222',
+        lineColor: '#555555',
+        textColor: '#f0f0f0',
+        fontSize: '14px',
+      },
+    });
+  </script>
+</AdminLayout>

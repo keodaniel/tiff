@@ -1,0 +1,38 @@
+sequenceDiagram
+    participant U as User
+    participant LP as /admin/login
+    participant API as /api/admin/login
+    participant Auth as lib/auth.ts
+    participant MW as middleware/index.ts
+
+    U->>LP: GET /admin/login
+    LP->>Auth: verifySession(cookie, SESSION_SECRET)
+    alt Already authenticated
+        LP-->>U: 302 → /admin
+    end
+    LP-->>U: Render password form
+
+    U->>API: POST /api/admin/login {password}
+    API->>Auth: checkPassword(input, env.ADMIN_PASSWORD)
+    note over Auth: Simple string equality — no hashing
+    alt Wrong password
+        API-->>U: 302 → /admin/login?error=1
+    end
+
+    API->>Auth: signSession(env.SESSION_SECRET)
+    note over Auth: payload = JSON {iat: now}\nEncoded as base64url\nSigned with HMAC-SHA256\nToken = payload.signature
+    Auth-->>API: signed token string
+
+    API-->>U: Set-Cookie: admin_session={token}
+    note over API: HttpOnly; Secure; SameSite=Strict\nPath=/; Max-Age=86400 (24 hr)
+    API-->>U: 302 → /admin
+
+    note over U,MW: Every subsequent /admin/* request
+
+    U->>MW: GET /admin/* (cookie attached automatically)
+    MW->>Auth: verifySession(token, env.SESSION_SECRET)
+    note over Auth: 1. Split token at last dot\n2. Recompute HMAC, compare\n3. Check iat + 86400 > now
+    alt Signature mismatch or expired
+        MW-->>U: 302 → /admin/login
+    end
+    MW-->>U: Admin page rendered

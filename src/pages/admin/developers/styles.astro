@@ -1,0 +1,138 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+const colors = [
+  { name: '--color-bg', value: '#111111', label: 'Background' },
+  { name: '--color-surface', value: '#1a1a1a', label: 'Surface' },
+  { name: '--color-surface-3', value: '#222222', label: 'Surface 3 / Input' },
+  { name: '--color-border', value: '#2a2a2a', label: 'Border' },
+  { name: '--color-text', value: '#f0f0f0', label: 'Text' },
+  { name: '--color-text-muted', value: '#888888', label: 'Text Muted' },
+  { name: '--color-text-dim', value: '#555555', label: 'Text Dim' },
+  { name: '--color-accent', value: '#CC0000', label: 'Accent' },
+  { name: '--color-accent-dark', value: '#990000', label: 'Accent Dark' },
+  { name: '--color-accent-glow', value: 'rgba(204,0,0,0.12)', label: 'Accent Glow' },
+];
+
+const radii = [
+  { name: '--radius-sm', value: '6px' },
+  { name: '--radius-md', value: '12px' },
+  { name: '--radius-pill', value: '20px' },
+];
+---
+
+<AdminLayout title="Style Reference">
+  <h1 class="admin-page-title">Style Reference</h1>
+  <p class="dev-intro">Live tokens and components from <code>src/styles/global.css</code>. All examples use the actual CSS classes.</p>
+
+  <section class="dev-section">
+    <h2 class="dev-section-title">Colors</h2>
+    <div class="color-swatches">
+      {colors.map(c => (
+        <div class="color-swatch">
+          <div class="color-swatch-box" style={`background: ${c.value}; ${c.value.startsWith('#1') || c.value.startsWith('#0') || c.value === '#111111' ? 'border-color: #333' : ''}`}></div>
+          <div class="color-swatch-name">{c.label}</div>
+          <div class="color-swatch-var">{c.name}</div>
+          <div class="color-swatch-value">{c.value}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="dev-section">
+    <h2 class="dev-section-title">Typography</h2>
+    <div class="type-samples">
+      <div>
+        <div class="type-sample-meta">--font-display · Outfit · 800 · 2rem</div>
+        <div style="font-family: var(--font-display); font-weight: 800; font-size: 2rem; line-height: 1.1;">Display Heading</div>
+      </div>
+      <div>
+        <div class="type-sample-meta">--font-display · Outfit · 700 · 1.25rem</div>
+        <div style="font-family: var(--font-display); font-weight: 700; font-size: 1.25rem;">Section Heading</div>
+      </div>
+      <div>
+        <div class="type-sample-meta">--font-display · Outfit · 700 · 1rem · uppercase · 0.1em tracking</div>
+        <div style="font-family: var(--font-display); font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em;">Label / Eyebrow</div>
+      </div>
+      <div>
+        <div class="type-sample-meta">--font-body · Plus Jakarta Sans · 400 · 1rem · 1.6 line-height</div>
+        <div style="font-family: var(--font-body); font-weight: 400; font-size: 1rem; line-height: 1.6; max-width: 560px;">Body text. Coach Tiff is a USA Weightlifting Level 2 Coach and national medalist with a well-rounded athletic background and a reputation for precision and poise.</div>
+      </div>
+      <div>
+        <div class="type-sample-meta">--font-body · Plus Jakarta Sans · 400 · 0.875rem · muted</div>
+        <div style="font-family: var(--font-body); font-weight: 400; font-size: 0.875rem; color: var(--color-text-muted);">Secondary / helper text — descriptions, labels, captions.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dev-section">
+    <h2 class="dev-section-title">Border Radius</h2>
+    <div class="radius-samples">
+      {radii.map(r => (
+        <div class="radius-sample">
+          <div class="radius-box" style={`border-radius: ${r.value}`}></div>
+          <div class="type-sample-meta">{r.name}</div>
+          <div class="type-sample-meta">{r.value}</div>
+        </div>
+      ))}
+      <div class="radius-sample">
+        <div style={`width: 80px; height: 36px; background: var(--color-surface-3); border: 1px solid var(--color-border); border-radius: var(--radius-pill);`}></div>
+        <div class="type-sample-meta">--radius-pill</div>
+        <div class="type-sample-meta">20px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dev-section">
+    <h2 class="dev-section-title">Buttons</h2>
+    <div class="dev-row">
+      <div>
+        <div class="type-sample-meta">.btn.btn-primary</div>
+        <button class="btn btn-primary" type="button">Primary Action</button>
+      </div>
+      <div>
+        <div class="type-sample-meta">.btn.btn-secondary</div>
+        <button class="btn btn-secondary" type="button">Secondary Action</button>
+      </div>
+      <div>
+        <div class="type-sample-meta">.btn.btn-primary (disabled)</div>
+        <button class="btn btn-primary" type="button" disabled>Disabled</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="dev-section">
+    <h2 class="dev-section-title">Form Elements</h2>
+    <div style="max-width: 400px; display: flex; flex-direction: column; gap: 16px;">
+      <div class="form-group">
+        <label class="form-label" for="ex-text">.form-label + .form-input (text)</label>
+        <input class="form-input" type="text" id="ex-text" placeholder="Placeholder text" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="ex-select">.form-label + .form-input (select)</label>
+        <select class="form-input" id="ex-select">
+          <option>Option A</option>
+          <option>Option B</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="ex-ta">.admin-textarea</label>
+        <textarea class="form-input admin-textarea" id="ex-ta" placeholder="Multi-line text..."></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section class="dev-section">
+    <h2 class="dev-section-title">Transition</h2>
+    <div class="type-sample-meta" style="margin-bottom: 8px;">--transition: 0.2s ease — used on hover states throughout</div>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <div class="admin-dash-card" style="width: 200px; padding: 16px; cursor: default;">
+        <div class="admin-dash-card-body">
+          <div class="admin-dash-card-label">Hover me</div>
+          <div class="admin-dash-card-desc">Uses --transition on border-color</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</AdminLayout>
