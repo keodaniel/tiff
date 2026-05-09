@@ -44,8 +44,25 @@ function copyDir(src, dest) {
   }
 }
 
-dedup('dist/server/wrangler.json');
+const serverConfig = dedup('dist/server/wrangler.json');
 dedup('dist/server/.prerender/wrangler.json');
+
+// Root wrangler.json for local `wrangler dev` / `wrangler deploy`.
+// Overrides wrangler.jsonc so wrangler uses the built entry and the correct
+// assets directory (dist/client, not dist).
+if (serverConfig) {
+  const localConfig = {
+    name: 'tiff-epm',
+    compatibility_date: serverConfig.compatibility_date,
+    compatibility_flags: serverConfig.compatibility_flags,
+    main: 'dist/server/entry.mjs',
+    assets: { directory: './dist/client', binding: 'ASSETS' },
+    kv_namespaces: serverConfig.kv_namespaces,
+    observability: serverConfig.observability,
+  };
+  writeFileSync('wrangler.json', JSON.stringify(localConfig, null, '\t'));
+  console.log('[fix-wrangler] Wrote root wrangler.json for local dev');
+}
 
 // Bundle server into dist/client/_w/ and create _worker.js.
 // CF Pages detects _worker.js in the output directory and runs it as the
