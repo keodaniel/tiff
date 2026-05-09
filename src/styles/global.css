@@ -1,11 +1,8 @@
 :root {
   --color-bg:               #111111;
   --color-surface:          #1a1a1a;
-  --color-surface-dark:     #111111;
-  --color-surface-dark2:    #1a1a1a;
   --color-surface-3:        #222222;
   --color-border:           #2a2a2a;
-  --color-border-dark:      #2a2a2a;
   --color-text:             #f0f0f0;
   --color-text-muted:       #888888;
   --color-text-dim:         #555555;
@@ -1386,4 +1383,4 @@ body.page-admin-login {
 .arch-nav-btn { font-size: 0.8rem; padding: 6px 14px; width: auto; }
 
 .mermaid-wrap { overflow-x: auto; background: #0d0d0d; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 24px; }
-.mermaid-wrap svg { max-width: 100%; }
+.mermaid-wrap svg { display: block; margin: 0 auto; max-width: 100%; }

@@ -1,5 +1,6 @@
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
+const SESSION_TTL = 86400; // 24 hours in seconds
 
 function b64urlEncode(buf: ArrayBuffer | Uint8Array): string {
   const bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
@@ -43,7 +44,7 @@ export async function verifySession(token: string, secret: string): Promise<bool
     const valid = await crypto.subtle.verify('HMAC', key, sig, encoder.encode(payload));
     if (!valid) return false;
     const { iat } = JSON.parse(decoder.decode(b64urlDecode(payload)));
-    return typeof iat === 'number' && iat + 86400 > Math.floor(Date.now() / 1000);
+    return typeof iat === 'number' && iat + SESSION_TTL > Math.floor(Date.now() / 1000);
   } catch {
     return false;
   }

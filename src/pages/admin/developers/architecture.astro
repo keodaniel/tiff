@@ -1,62 +1,56 @@
 ---
 export const prerender = false;
 import AdminLayout from '../../../layouts/AdminLayout.astro';
-import diag1 from '../../../docs/01-system-overview.mmd?raw';
-import diag2 from '../../../docs/02-request-flow.mmd?raw';
-import diag3 from '../../../docs/03-data-model.mmd?raw';
-import diag4 from '../../../docs/04-auth-flow.mmd?raw';
-import diag5 from '../../../docs/05-component-tree.mmd?raw';
-import diag6 from '../../../docs/06-build-pipeline.mmd?raw';
 
 const diagrams = [
   {
     number: 1,
     title: 'System Overview',
     desc: "Bird's-eye view — GitHub to browser via Cloudflare Pages CI, the SSR Worker, and KV.",
-    src: diag1,
-    file: 'src/docs/01-system-overview.mmd',
+    url: '/docs/01-system-overview.mmd',
+    file: 'public/docs/01-system-overview.mmd',
   },
   {
     number: 2,
     title: 'Request Flow',
     desc: 'How a single HTTP request travels: CF Pages → Astro Worker → Middleware → Route Handler → KV → HTML.',
-    src: diag2,
-    file: 'src/docs/02-request-flow.mmd',
+    url: '/docs/02-request-flow.mmd',
+    file: 'public/docs/02-request-flow.mmd',
   },
   {
     number: 3,
     title: 'Data Model',
     desc: 'Everything stored in Cloudflare KV (SITE_DATA) — all keys, their JSON shapes, and relationships.',
-    src: diag3,
-    file: 'src/docs/03-data-model.mmd',
+    url: '/docs/03-data-model.mmd',
+    file: 'public/docs/03-data-model.mmd',
   },
   {
     number: 4,
     title: 'Auth Flow',
     desc: 'Full admin login cycle — password POST, HMAC-SHA256 session signing, cookie, and middleware verification.',
-    src: diag4,
-    file: 'src/docs/04-auth-flow.mmd',
+    url: '/docs/04-auth-flow.mmd',
+    file: 'public/docs/04-auth-flow.mmd',
   },
   {
     number: 5,
     title: 'Component Tree',
     desc: 'Every Astro page and component, showing how layouts wrap pages and slide components nest together.',
-    src: diag5,
-    file: 'src/docs/05-component-tree.mmd',
+    url: '/docs/05-component-tree.mmd',
+    file: 'public/docs/05-component-tree.mmd',
   },
   {
     number: 6,
     title: 'Build Pipeline',
     desc: 'What npm run build does — astro build output, the three fix-wrangler.mjs jobs, and CF Pages deployment.',
-    src: diag6,
-    file: 'src/docs/06-build-pipeline.mmd',
+    url: '/docs/06-build-pipeline.mmd',
+    file: 'public/docs/06-build-pipeline.mmd',
   },
 ];
 ---
 
 <AdminLayout title="Architecture" wide>
   <h1 class="admin-page-title">Architecture</h1>
-  <p class="dev-intro">Six Mermaid diagrams from high-level to low-level. Source files in <code>src/docs/</code> — open any <code>.mmd</code> in VS Code with the Mermaid extension for an interactive preview.</p>
+  <p class="dev-intro">Six Mermaid diagrams from high-level to low-level. Source files in <code>public/docs/</code> — open any <code>.mmd</code> in VS Code with the Mermaid extension for an interactive preview.</p>
 
   <div class="arch-tab-bar" role="tablist">
     {diagrams.map((d, i) => (
@@ -86,7 +80,7 @@ const diagrams = [
         <code class="arch-file">{d.file}</code>
       </div>
       <div class="mermaid-wrap">
-        <pre class="mermaid">{d.src}</pre>
+        <div class="mermaid-container" data-url={d.url}></div>
       </div>
       <div class="arch-panel-nav">
         {i > 0 ? (
@@ -99,29 +93,11 @@ const diagrams = [
     </div>
   ))}
 
-  <script>
-    const tabs = Array.from(document.querySelectorAll<HTMLElement>('.arch-tab'));
-    const panels = Array.from(document.querySelectorAll<HTMLElement>('.arch-panel'));
-
-    function show(idx: number) {
-      tabs.forEach((t, i) => {
-        t.classList.toggle('is-active', i === idx);
-        t.setAttribute('aria-selected', String(i === idx));
-      });
-      panels.forEach((p, i) => p.classList.toggle('is-hidden', i !== idx));
-    }
-
-    tabs.forEach((tab, i) => tab.addEventListener('click', () => show(i)));
-
-    document.querySelectorAll<HTMLElement>('.arch-nav-btn').forEach(btn => {
-      btn.addEventListener('click', () => show(Number(btn.dataset.target)));
-    });
-  </script>
-
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
     mermaid.initialize({
-      startOnLoad: true,
+      startOnLoad: false,
       theme: 'dark',
       themeVariables: {
         background: '#0d0d0d',
@@ -135,5 +111,45 @@ const diagrams = [
         fontSize: '14px',
       },
     });
+
+    const tabs = Array.from(document.querySelectorAll('.arch-tab'));
+    const panels = Array.from(document.querySelectorAll('.arch-panel'));
+    const containers = Array.from(document.querySelectorAll('.mermaid-container'));
+    const rendered = new Set();
+
+    async function renderDiagram(idx) {
+      if (rendered.has(idx)) return;
+      rendered.add(idx);
+      const container = containers[idx];
+      if (!container) return;
+      try {
+        const res = await fetch(container.dataset.url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const text = await res.text();
+        const { svg, bindFunctions } = await mermaid.render('mermaid-svg-' + idx, text);
+        container.innerHTML = svg;
+        bindFunctions?.(container);
+      } catch (e) {
+        rendered.delete(idx);
+        container.innerHTML = '<p style="color:#CC0000;padding:1rem">Diagram failed to load: ' + e + '</p>';
+      }
+    }
+
+    function show(idx) {
+      tabs.forEach((t, i) => {
+        t.classList.toggle('is-active', i === idx);
+        t.setAttribute('aria-selected', String(i === idx));
+      });
+      panels.forEach((p, i) => p.classList.toggle('is-hidden', i !== idx));
+      renderDiagram(idx);
+    }
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => show(i)));
+
+    document.querySelectorAll('.arch-nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => show(Number(btn.dataset.target)));
+    });
+
+    renderDiagram(0);
   </script>
 </AdminLayout>

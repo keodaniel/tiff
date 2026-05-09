@@ -28,23 +28,16 @@ try {
   if (co) homeCopy = { ...DEFAULT_COPY, ...JSON.parse(co) };
 } catch {}
 
-const navLinks = [
+const slides = [
   { label: 'Home', slide: 0 },
   { label: 'Promo Codes', slide: 1 },
   { label: 'View Memberships', slide: 2 },
   { label: 'Meet Coach Tiff', slide: 3 },
 ];
-
-const slideDots = [
-  { label: 'Home', index: 0 },
-  { label: 'Promo Codes', index: 1 },
-  { label: 'View Memberships', index: 2 },
-  { label: 'Meet Coach Tiff', index: 3 },
-];
 ---
 
 <Base>
-  <Nav links={navLinks} />
+  <Nav links={slides} />
 
   <div class="slides-track">
     <div class="slides-inner" id="slides-inner">
@@ -55,10 +48,10 @@ const slideDots = [
     </div>
 
     <div class="slide-dots" id="slide-dots" aria-hidden="true">
-      {slideDots.map((dot) => (
+      {slides.map((dot) => (
         <button
-          class={`slide-dot${dot.index === 0 ? ' is-active' : ''}`}
-          data-go-slide={dot.index}
+          class={`slide-dot${dot.slide === 0 ? ' is-active' : ''}`}
+          data-go-slide={dot.slide}
           aria-label={dot.label}
         />
       ))}

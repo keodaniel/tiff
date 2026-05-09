@@ -1,9 +1,9 @@
 erDiagram
-    SITE_DATA ||--o{ PROGRAM : "programs:list"
-    SITE_DATA ||--o{ PROMO : "promos:list"
-    SITE_DATA ||--|| COPY_HOME : "copy:home"
-    SITE_DATA ||--|| FLAGS : "flags:all"
-    SITE_DATA ||--o{ SUBMISSION : "submissions:id"
+    SITE_DATA ||--o{ PROGRAM : "programs-list"
+    SITE_DATA ||--o{ PROMO : "promos-list"
+    SITE_DATA ||--|| COPY_HOME : "copy-home"
+    SITE_DATA ||--|| FLAGS : "flags-all"
+    SITE_DATA ||--o{ SUBMISSION : "submissions-id"
 
     PROGRAM {
         string id
@@ -13,8 +13,8 @@ erDiagram
         int price
         string gradient
         string stripeUrl
-        boolean featured
-        boolean inquireOnly
+        string featured
+        string inquireOnly
         string badges
         string features
     }
@@ -34,10 +34,10 @@ erDiagram
     }
 
     FLAGS {
-        boolean shopEnabled
-        boolean cartEnabled
-        boolean promoCodesEnabled
-        boolean applyFormEnabled
+        string shopEnabled
+        string cartEnabled
+        string promoCodesEnabled
+        string applyFormEnabled
     }
 
     SUBMISSION {
@@ -46,7 +46,7 @@ erDiagram
         string name
         string email
         string phone
-        string program_type
+        string programType
         string schedule
         string history
         string goals
