@@ -36,9 +36,12 @@ const navLinks = [
           </a>
         ))}
       </nav>
-      <form method="POST" action="/api/admin/logout" class="admin-logout-form">
-        <button type="submit" class="btn btn-secondary admin-logout-btn">Log out</button>
-      </form>
+      <div class="admin-header-actions">
+        <a href="/" class="btn btn-secondary admin-home-btn">← Site</a>
+        <form method="POST" action="/api/admin/logout" class="admin-logout-form">
+          <button type="submit" class="btn btn-secondary admin-logout-btn">Log out</button>
+        </form>
+      </div>
     </div>
   </header>
   <main class="admin-main">

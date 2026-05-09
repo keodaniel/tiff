@@ -590,6 +590,8 @@ button { font-family: inherit; }
   align-items: center; gap: 6px; text-align: center;
 }
 .footer-logo { height: 56px; width: auto; flex-shrink: 0; }
+.footer-admin-btn { display: inline-block; margin-top: 10px; padding: 5px 14px; font-size: 0.75rem; border: 1px solid var(--color-border); border-radius: 4px; color: var(--color-text-muted); text-decoration: none; letter-spacing: 0.05em; transition: border-color 0.2s, color 0.2s; }
+.footer-admin-btn:hover { border-color: var(--color-accent); color: var(--color-text); }
 .footer-copy { font-size: 0.85rem; color: var(--color-text-muted); }
 .footer-tagline {
   font-family: var(--font-display);
@@ -1037,8 +1039,9 @@ body.page-admin-login {
 }
 .admin-nav-link:hover { color: var(--color-text); background: rgba(255,255,255,0.05); }
 .admin-nav-link.is-active { color: var(--color-text); }
-.admin-logout-form { margin-left: auto; flex-shrink: 0; }
-.admin-logout-btn { padding: 6px 14px; font-size: 0.8rem; width: auto; }
+.admin-header-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
+.admin-logout-form { flex-shrink: 0; }
+.admin-logout-btn, .admin-home-btn { padding: 6px 14px; font-size: 0.8rem; width: auto; }
 
 /* ── Admin main ── */
 .admin-main {
@@ -1102,6 +1105,7 @@ body.page-admin-login {
 }
 .admin-login-form { display: flex; flex-direction: column; gap: 20px; }
 .admin-login-submit { margin-top: 4px; }
+.admin-login-home { display: block; margin-top: 12px; text-align: center; font-size: 0.85rem; }
 
 /* ── Admin dashboard grid ── */
 .admin-dash-grid {
