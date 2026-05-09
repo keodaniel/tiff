@@ -24,8 +24,7 @@ const navLinks = [
   <header class="admin-header">
     <div class="admin-header-inner">
       <a href="/admin" class="admin-logo-link">
-        <img src="/tpc_logo_red_no_bg.png" alt="Tank Performance and Weightlifting" class="admin-logo" />
-        <span class="admin-header-label">Admin</span>
+        <img src="/tpc_logo_white_no_bg.png" alt="Tank Performance and Weightlifting" class="admin-logo" />
       </a>
       <nav class="admin-nav" aria-label="Admin navigation">
         {navLinks.map(link => {
@@ -42,7 +41,7 @@ const navLinks = [
         })}
       </nav>
       <div class="admin-header-actions">
-        <a href="/" class="btn btn-secondary admin-home-btn">← Site</a>
+        <a href="/" class="btn btn-secondary admin-home-btn">← Back to Site</a>
         <form method="POST" action="/api/admin/logout" class="admin-logout-form">
           <button type="submit" class="btn btn-secondary admin-logout-btn">Log out</button>
         </form>

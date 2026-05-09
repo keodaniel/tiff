@@ -1,6 +1,7 @@
 ---
 import PromoCard from '../PromoCard.astro';
 import type staticPromos from '../../data/promos.json';
+import Footer from '../Footer.astro';
 
 interface Props {
   promos: typeof staticPromos;
@@ -30,4 +31,5 @@ const { promos } = Astro.props;
       </div>
     </div>
   </section>
+  <Footer />
 </div>

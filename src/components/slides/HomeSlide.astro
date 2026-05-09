@@ -1,6 +1,7 @@
 ---
 import ShopCard from '../ShopCard.astro';
 import shopItems from '../../data/shop.json';
+import Footer from '../Footer.astro';
 
 interface Props {
   eyebrow?: string;
@@ -62,4 +63,5 @@ const courses = shopItems.filter((item) => item.category === 'courses');
       <div class="scroll-hint" aria-hidden="true">→</div>
     </div>
   </section>
+  <Footer />
 </div>

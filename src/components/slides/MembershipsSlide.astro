@@ -1,6 +1,7 @@
 ---
 import ProgramCard from '../ProgramCard.astro';
 import type staticPrograms from '../../data/programs.json';
+import Footer from '../Footer.astro';
 
 interface Props {
   programs: typeof staticPrograms;
@@ -35,4 +36,5 @@ const { programs } = Astro.props;
       </div>
     </div>
   </section>
+  <Footer />
 </div>

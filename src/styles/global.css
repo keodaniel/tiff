@@ -62,7 +62,7 @@ button { font-family: inherit; }
   align-items: center;
   flex-shrink: 0;
 }
-.nav-logo-img { height: 44px; width: auto; }
+.nav-logo-img { height: 50px; width: auto; }
 .nav-toggle {
   display: flex;
   flex-direction: column;
