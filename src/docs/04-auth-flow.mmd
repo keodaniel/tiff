@@ -1,6 +1,6 @@
 sequenceDiagram
     participant U as User
-    participant LP as admin/login page
+    participant LP as login page
     participant API as api/admin/login
     participant Auth as lib/auth.ts
     participant MW as middleware
@@ -20,9 +20,10 @@ sequenceDiagram
         API-->>U: 302 to /admin/login?error=1
     else Correct password
         API->>Auth: signSession(env.SESSION_SECRET)
-        note over Auth: payload = base64url(JSON iat timestamp)<br/>signature = HMAC-SHA256(payload, secret)<br/>token = payload.signature
+        note over Auth: HMAC-SHA256 signed token with iat timestamp
+        note over Auth: token = base64url(payload).signature
         Auth-->>API: signed token string
-        API-->>U: Set-Cookie admin_session=token, HttpOnly, Secure, 24hr
+        API-->>U: Set-Cookie admin_session=token HttpOnly Secure 24hr
         API-->>U: 302 to /admin
     end
 
@@ -30,7 +31,8 @@ sequenceDiagram
 
     U->>MW: GET /admin/* with cookie
     MW->>Auth: verifySession(token, env.SESSION_SECRET)
-    note over Auth: 1. Split at last dot into payload and sig<br/>2. Recompute HMAC, compare signatures<br/>3. Decode iat, check iat + 86400 is after now
+    note over Auth: Split at last dot, recompute HMAC, compare
+    note over Auth: Decode iat, verify iat + 86400 is after now
     alt Signature mismatch or expired
         MW-->>U: 302 to /admin/login
     else Valid session

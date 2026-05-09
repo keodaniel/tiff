@@ -3,9 +3,10 @@ import Base from './Base.astro';
 
 interface Props {
   title: string;
+  wide?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, wide = false } = Astro.props;
 const path = Astro.url.pathname;
 
 const navLinks = [
@@ -48,7 +49,7 @@ const navLinks = [
       </div>
     </div>
   </header>
-  <main class="admin-main">
+  <main class={`admin-main${wide ? ' admin-main--wide' : ''}`}>
     <slot />
   </main>
 </Base>

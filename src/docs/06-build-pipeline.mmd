@@ -1,5 +1,5 @@
 flowchart LR
-    Source["src/\nAstro components\nPages · Layouts\nStyles · Lib"]
+    Source["src/\nAstro components\nPages, Layouts\nStyles, Lib"]
 
     subgraph Build ["npm run build"]
         direction TB
@@ -11,31 +11,31 @@ flowchart LR
     Source --> AB
 
     subgraph AstroOut ["Astro Output"]
-        Client["dist/client/\n_astro/ · images\nprerendered HTML\n.assetsignore"]
+        Client["dist/client/\n_astro/, images\nprerendered HTML\n.assetsignore"]
         Server["dist/server/\nentry.mjs\nchunks/\nwrangler.json"]
     end
 
     AB --> AstroOut
 
-    subgraph FixJobs ["fix-wrangler.mjs — 3 jobs"]
-        J1["① Dedup KV bindings\nin dist/server/wrangler.json\n(vite-plugin bug workaround)"]
-        J2["② Bundle server for CF Pages\ncopy dist/server → dist/client/_w/\ncreate dist/client/_worker.js"]
-        J3["③ Write root wrangler.json\n(gitignored)\nfor local wrangler dev"]
+    subgraph FixJobs ["fix-wrangler.mjs - 3 jobs"]
+        J1["1. Dedup KV bindings\nin dist/server/wrangler.json\nvite-plugin bug workaround"]
+        J2["2. Bundle server for CF Pages\ncopy dist/server to dist/client/_w/\ncreate dist/client/_worker.js"]
+        J3["3. Write root wrangler.json\ngitignored\nfor local wrangler dev"]
     end
 
     FW --> FixJobs
 
     subgraph CFPages ["Cloudflare Pages CI"]
         WJS["_worker.js detected\nRuns as SSR Worker\nHandles dynamic routes"]
-        SA["Static assets\nServed directly by CF\n(images, CSS, fonts)"]
+        SA["Static assets\nServed directly by CF\nimages, CSS, fonts"]
     end
 
     AstroOut --> CFPages
     FixJobs --> CFPages
 
     subgraph LocalDev ["Local Development"]
-        DevCmd["npm run dev -- --host\nAstro dev server\nHMR · localhost:4321"]
-        PrevCmd["npm run preview\nwrangler pages dev dist/client\nFull CF runtime · port 8788"]
+        DevCmd["npm run dev -- --host\nAstro dev server\nHMR, localhost:4321"]
+        PrevCmd["npm run preview\nwrangler pages dev dist/client\nFull CF runtime, port 8788"]
     end
 
     Source -.->|"file watch"| DevCmd

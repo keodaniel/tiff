@@ -1049,6 +1049,7 @@ body.page-admin-login {
   margin: 0 auto;
   padding: 40px 24px 80px;
 }
+.admin-main--wide { max-width: 1600px; }
 .admin-page-title {
   font-family: var(--font-display);
   font-size: 1.8rem;
