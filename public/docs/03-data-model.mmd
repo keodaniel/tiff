@@ -1,0 +1,53 @@
+erDiagram
+    SITE_DATA ||--o{ PROGRAM : "programs-list"
+    SITE_DATA ||--o{ PROMO : "promos-list"
+    SITE_DATA ||--|| COPY_HOME : "copy-home"
+    SITE_DATA ||--|| FLAGS : "flags-all"
+    SITE_DATA ||--o{ SUBMISSION : "submissions-id"
+
+    PROGRAM {
+        string id
+        string tag
+        string title
+        string program
+        int price
+        string gradient
+        string stripeUrl
+        string featured
+        string inquireOnly
+        string badges
+        string features
+    }
+
+    PROMO {
+        string id
+        string brand
+        string code
+        string shopUrl
+        string description
+        string usage
+    }
+
+    COPY_HOME {
+        string eyebrow
+        string clubName
+    }
+
+    FLAGS {
+        string shopEnabled
+        string cartEnabled
+        string promoCodesEnabled
+        string applyFormEnabled
+    }
+
+    SUBMISSION {
+        string id
+        string submittedAt
+        string name
+        string email
+        string phone
+        string programType
+        string schedule
+        string history
+        string goals
+    }

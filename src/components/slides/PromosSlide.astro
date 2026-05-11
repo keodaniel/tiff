@@ -1,6 +1,13 @@
 ---
 import PromoCard from '../PromoCard.astro';
-import promos from '../../data/promos.json';
+import type staticPromos from '../../data/promos.json';
+import Footer from '../Footer.astro';
+
+interface Props {
+  promos: typeof staticPromos;
+}
+
+const { promos } = Astro.props;
 ---
 
 <div class="slide">
@@ -24,4 +31,5 @@ import promos from '../../data/promos.json';
       </div>
     </div>
   </section>
+  <Footer />
 </div>

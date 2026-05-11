@@ -1,0 +1,235 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import staticPromos from '../../data/promos.json';
+import { env } from 'cloudflare:workers';
+
+let promos = staticPromos as any[];
+try {
+  const raw = await env.SITE_DATA.get('promos:list');
+  if (raw) promos = JSON.parse(raw);
+} catch {}
+---
+
+<AdminLayout title="Promo Codes">
+  <div class="admin-section-header">
+    <h1 class="admin-page-title">Promo Codes</h1>
+    <button id="add-btn" class="btn btn-primary admin-action-btn">Add Promo</button>
+  </div>
+
+  <div id="add-form-container" hidden>
+    <form id="add-form" class="admin-edit-form">
+      <h2 class="admin-form-title">New Promo Code</h2>
+      <div class="admin-edit-row">
+        <div class="form-group">
+          <label class="form-label" for="add-id">ID (URL-safe slug)</label>
+          <input class="form-input" type="text" id="add-id" name="id" required pattern="[a-z0-9\-]+" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="add-brand">Brand</label>
+          <input class="form-input" type="text" id="add-brand" name="brand" required />
+        </div>
+      </div>
+      <div class="admin-edit-row">
+        <div class="form-group">
+          <label class="form-label" for="add-code">Promo Code</label>
+          <input class="form-input" type="text" id="add-code" name="code" required style="text-transform: uppercase" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="add-shopUrl">Shop URL</label>
+          <input class="form-input" type="url" id="add-shopUrl" name="shopUrl" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="add-description">Description</label>
+        <textarea class="form-input admin-textarea" id="add-description" name="description" rows="2"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="add-usage">Usage Instructions</label>
+        <input class="form-input" type="text" id="add-usage" name="usage" placeholder="Use at checkout on example.com" />
+      </div>
+      <div class="admin-edit-actions">
+        <button type="submit" class="btn btn-primary">Save Promo</button>
+        <button type="button" id="add-cancel" class="btn btn-secondary">Cancel</button>
+      </div>
+      <p class="admin-save-status" hidden></p>
+    </form>
+  </div>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Brand</th>
+        <th>Code</th>
+        <th>Shop URL</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="promos-tbody">
+      {promos.map((p: any) => (
+        <tr data-id={p.id}>
+          <td>{p.brand}</td>
+          <td><code>{p.code}</code></td>
+          <td><a href={p.shopUrl} target="_blank" rel="noopener" class="admin-link">{p.shopUrl}</a></td>
+          <td>
+            <button class="btn btn-secondary admin-table-action edit-btn" data-promo={JSON.stringify(p)}>Edit</button>
+            <button class="btn btn-secondary admin-table-action delete-btn" data-id={p.id}>Delete</button>
+          </td>
+        </tr>
+        <tr class="edit-row" id={`edit-row-${p.id}`} hidden>
+          <td colspan="4">
+            <form class="admin-edit-form edit-form" data-id={p.id}>
+              <div class="admin-edit-row">
+                <div class="form-group">
+                  <label class="form-label">ID</label>
+                  <input class="form-input" type="text" name="id" value={p.id} readonly />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Brand</label>
+                  <input class="form-input" type="text" name="brand" value={p.brand} required />
+                </div>
+              </div>
+              <div class="admin-edit-row">
+                <div class="form-group">
+                  <label class="form-label">Promo Code</label>
+                  <input class="form-input" type="text" name="code" value={p.code} required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Shop URL</label>
+                  <input class="form-input" type="url" name="shopUrl" value={p.shopUrl} required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-input admin-textarea" name="description" rows="2">{p.description}</textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Usage Instructions</label>
+                <input class="form-input" type="text" name="usage" value={p.usage} />
+              </div>
+              <div class="admin-edit-actions">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary cancel-edit-btn" data-id={p.id}>Cancel</button>
+              </div>
+              <p class="admin-save-status" hidden></p>
+            </form>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</AdminLayout>
+
+<script>
+  let promos: any[] = Array.from(
+    document.querySelectorAll<HTMLTableRowElement>('#promos-tbody tr[data-id]')
+  ).map(row => {
+    const editBtn = row.querySelector<HTMLButtonElement>('.edit-btn');
+    return editBtn ? JSON.parse(editBtn.dataset.promo ?? '{}') : null;
+  }).filter(Boolean);
+
+  async function saveAll(updated: any[]) {
+    const res = await fetch('/api/admin/promos', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated),
+    });
+    return res.ok;
+  }
+
+  function formToPromo(form: HTMLFormElement, existing?: any): any {
+    const d = new FormData(form);
+    return {
+      ...(existing ?? {}),
+      id: (d.get('id') as string).trim(),
+      brand: (d.get('brand') as string).trim(),
+      code: (d.get('code') as string).trim().toUpperCase(),
+      shopUrl: (d.get('shopUrl') as string).trim(),
+      description: (d.get('description') as string).trim(),
+      usage: (d.get('usage') as string).trim(),
+    };
+  }
+
+  function showStatus(form: HTMLFormElement, ok: boolean) {
+    const p = form.querySelector<HTMLElement>('.admin-save-status');
+    if (!p) return;
+    p.textContent = ok ? 'Saved.' : 'Save failed. Please try again.';
+    p.className = `admin-save-status ${ok ? 'is-success' : 'is-error'}`;
+    p.hidden = false;
+    setTimeout(() => { p.hidden = true; }, 3000);
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.closest('tr')?.dataset.id;
+      if (id) document.getElementById(`edit-row-${id}`)?.removeAttribute('hidden');
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.cancel-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById(`edit-row-${btn.dataset.id}`)?.setAttribute('hidden', '');
+    });
+  });
+
+  document.querySelectorAll<HTMLFormElement>('.edit-form').forEach(form => {
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const id = form.dataset.id;
+      const existing = promos.find(p => p.id === id);
+      const updated = formToPromo(form, existing);
+      const newList = promos.map(p => p.id === id ? updated : p);
+      const ok = await saveAll(newList);
+      if (ok) {
+        promos = newList;
+        document.getElementById(`edit-row-${id}`)?.setAttribute('hidden', '');
+      }
+      showStatus(form, ok);
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Delete this promo code?')) return;
+      const id = btn.dataset.id;
+      const newList = promos.filter(p => p.id !== id);
+      const ok = await saveAll(newList);
+      if (ok) {
+        promos = newList;
+        btn.closest('tr')?.remove();
+        document.getElementById(`edit-row-${id}`)?.remove();
+      } else {
+        alert('Delete failed. Please try again.');
+      }
+    });
+  });
+
+  const addBtn = document.getElementById('add-btn');
+  const addFormContainer = document.getElementById('add-form-container');
+  const addForm = document.getElementById('add-form') as HTMLFormElement;
+  const addCancel = document.getElementById('add-cancel');
+
+  addBtn?.addEventListener('click', () => {
+    addFormContainer?.removeAttribute('hidden');
+    addBtn.setAttribute('hidden', '');
+  });
+
+  addCancel?.addEventListener('click', () => {
+    addFormContainer?.setAttribute('hidden', '');
+    addBtn?.removeAttribute('hidden');
+    addForm?.reset();
+  });
+
+  addForm?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const newPromo = formToPromo(addForm);
+    const newList = [...promos, newPromo];
+    const ok = await saveAll(newList);
+    if (ok) {
+      showStatus(addForm, true);
+      setTimeout(() => location.reload(), 1000);
+    } else {
+      showStatus(addForm, false);
+    }
+  });
+</script>

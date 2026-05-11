@@ -1,0 +1,63 @@
+[
+  {
+    "id": "mobility-prep-5wk",
+    "tag": "Digital Program",
+    "category": "programs",
+    "title": "5 Week Mobility Prep for Olympic Weightlifting",
+    "price": 49,
+    "badges": [],
+    "features": [
+      "Daily mobility routines — hip, ankle, and thoracic spine",
+      "5 weeks of progressive flexibility work",
+      "Warm-up protocol for training and competition day",
+      "Video exercise library included",
+      "Suitable for all experience levels"
+    ]
+  },
+  {
+    "id": "usmc-pft-prep-8wk",
+    "tag": "Digital Program",
+    "category": "programs",
+    "title": "8 Week USMC PFT Prep",
+    "price": 39,
+    "badges": ["New"],
+    "features": [
+      "Pull-ups, crunches, and 3-mile run programming",
+      "5 days per week structured training",
+      "Periodized intensity with score projection",
+      "Suitable for active duty, reserves, and recruits",
+      "Printable training logs included"
+    ]
+  },
+  {
+    "id": "bhb-team-tshirt",
+    "tag": "Merch",
+    "category": "merch",
+    "title": "Tank Performance and Weightlifting Team T-Shirt",
+    "price": 35,
+    "badges": [],
+    "variants": ["XS", "S", "M", "L", "XL", "2XL"],
+    "features": [
+      "100% heavyweight cotton",
+      "Tank Performance and Weightlifting logo on chest",
+      "Unisex relaxed fit",
+      "Available in XS – 2XL"
+    ]
+  },
+  {
+    "id": "6wk-oly-crash-course-for-crossfitters",
+    "stripeUrl": "https://book.stripe.com/14AcN7bqB0EvaDGfSOdZ60h",
+    "tag": "Remote Course",
+    "category": "courses",
+    "title": "6-Week Olympic Weightlifting Crash Course for Crossfitters",
+    "price": 250,
+    "badges": ["New","Next Course Starting June 1st"],
+    "features": [
+      "Daily Video Reviews of Snatch, Clean & Jerk, and Accessory Work",
+      "Tailored Technical Feedback and Coaching Cues",
+      "Snatch and Clean & Jerk Testing / Technical Assessment",
+      "Group Programming for Technique and Strength Development",
+      "Post Course One Rep Max (1RM) Testing with Live Video Coaching"
+    ]
+  }
+]

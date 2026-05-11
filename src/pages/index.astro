@@ -1,46 +1,57 @@
 ---
+export const prerender = false;
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import HomeSlide from '../components/slides/HomeSlide.astro';
 import PromosSlide from '../components/slides/PromosSlide.astro';
 import MembershipsSlide from '../components/slides/MembershipsSlide.astro';
-import ApplySlide from '../components/slides/ApplySlide.astro';
 import AboutSlide from '../components/slides/AboutSlide.astro';
+import staticPrograms from '../data/programs.json';
+import staticPromos from '../data/promos.json';
+import { env } from 'cloudflare:workers';
 
-const navLinks = [
+import { DEFAULT_COPY } from './api/admin/copy';
+
+let programs = staticPrograms as typeof staticPrograms;
+let promos = staticPromos as typeof staticPromos;
+let homeCopy = { ...DEFAULT_COPY };
+try {
+  const pr = await env.SITE_DATA.get('programs:list');
+  if (pr) programs = JSON.parse(pr);
+} catch {}
+try {
+  const po = await env.SITE_DATA.get('promos:list');
+  if (po) promos = JSON.parse(po);
+} catch {}
+try {
+  const co = await env.SITE_DATA.get('copy:home');
+  if (co) homeCopy = { ...DEFAULT_COPY, ...JSON.parse(co) };
+} catch {}
+
+const slides = [
   { label: 'Home', slide: 0 },
-  { label: 'Promo Codes', slide: 1 },
-  { label: 'View Memberships', slide: 2 },
-  { label: 'Apply for Coaching', slide: 3 },
-  { label: 'Meet Coach Tiff', slide: 4 },
-];
-
-const slideDots = [
-  { label: 'Home', index: 0 },
-  { label: 'Promo Codes', index: 1 },
-  { label: 'View Memberships', index: 2 },
-  { label: 'Apply for Coaching', index: 3 },
-  { label: 'Meet Coach Tiff', index: 4 },
+  { label: 'View Memberships', slide: 1 },
+  { label: 'Promo Codes', slide: 2 },
+  { label: 'About Me', slide: 3 },
 ];
 ---
 
 <Base>
-  <Nav links={navLinks} />
+  <Nav links={slides} />
 
   <div class="slides-track">
     <div class="slides-inner" id="slides-inner">
-      <HomeSlide />
-      <PromosSlide />
-      <MembershipsSlide />
-      <ApplySlide />
+      <HomeSlide eyebrow={homeCopy.eyebrow} clubName={homeCopy.clubName} />
+      <MembershipsSlide programs={programs} />
+      <PromosSlide promos={promos} />
       <AboutSlide />
     </div>
 
     <div class="slide-dots" id="slide-dots" aria-hidden="true">
-      {slideDots.map((dot) => (
+      {slides.map((dot) => (
         <button
-          class={`slide-dot${dot.index === 0 ? ' is-active' : ''}`}
-          data-go-slide={dot.index}
+          class={`slide-dot${dot.slide === 0 ? ' is-active' : ''}`}
+          data-go-slide={dot.slide}
           aria-label={dot.label}
         />
       ))}
@@ -52,11 +63,12 @@ const slideDots = [
   const slidesInner = document.getElementById('slides-inner')!;
   const navToggle = document.querySelector<HTMLButtonElement>('.nav-toggle')!;
   const navMenu = document.getElementById('nav-menu')!;
-  const SLIDE_COUNT = 5;
+  const SLIDE_COUNT = 4;
   let current = 0;
 
   function slideTo(index: number) {
     current = Math.max(0, Math.min(index, SLIDE_COUNT - 1));
+    sessionStorage.setItem('slide', String(current));
     slidesInner.style.transform = `translateX(calc(${-current} * 100vw))`;
 
     document.querySelectorAll('.slide-dot').forEach((dot, i) => {
@@ -88,6 +100,10 @@ const slideDots = [
     e.preventDefault();
     slideTo(parseInt(el.dataset.goSlide!, 10));
   });
+
+  // Restore slide position on back-navigation
+  const savedSlide = sessionStorage.getItem('slide');
+  if (savedSlide !== null) slideTo(parseInt(savedSlide, 10));
 
   // Hamburger toggle
   navToggle.addEventListener('click', () => {
@@ -125,14 +141,4 @@ const slideDots = [
     }
   }, { passive: true });
 
-  // Apply Now → pre-select program checkbox
-  document.querySelectorAll<HTMLElement>('.card-cta[data-program]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const program = btn.dataset.program ?? '';
-      document.querySelectorAll<HTMLInputElement>('input[name="program_type"]').forEach((cb) => {
-        if (cb.value === program) cb.checked = true;
-      });
-      document.querySelector<HTMLElement>('.other-text-wrap')?.setAttribute('hidden', '');
-    });
-  });
 </script>

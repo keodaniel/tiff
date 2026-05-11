@@ -1,13 +1,15 @@
 [
   {
     "id": "oly-remote",
+    "stripeUrl": "https://buy.stripe.com/9B628t52dcndcLO9uqdZ60g",
     "tag": "Remote",
     "title": "Olympic Weightlifting Remote Team",
     "price": 200,
     "period": "month",
     "featured": true,
-    "badge": "Most Popular",
+    "badges": ["Most Popular"],
     "program": "Olympic Weightlifting",
+    "gradient": "dark-red",
     "ctaStyle": "primary",
     "features": [
       { "text": "3–5 day/week programming based on goals & experience" },
@@ -17,37 +19,42 @@
     ]
   },
   {
-    "id": "general-strength",
+    "id": "military",
+    "inquireOnly": true,
     "tag": "Remote",
-    "title": "General Strength Remote Team",
+    "title": "Tactical Strength and Conditioning",
     "price": 175,
     "period": "month",
     "featured": false,
-    "badge": null,
-    "program": "General Strength and Wellness",
+    "badges": [],
+    "program": "Tactical Strength and Conditioning",
+    "gradient": "dark-red",
+    "ctaStyle": "primary",
+    "features": [
+      { "text": "Programming for military, law enforcement, and first responders" },
+      { "text": "Great for academy preparation, annual fitness tests, and maintaining fitness for service" },
+      { "text": "3-5 day/week programming" },
+      { "text": "Weekly check-ins" },
+      { "text": "Variety of training modalities including strength, conditioning, and mobility" }
+    ]
+  },
+  {
+    "id": "general-strength",
+    "inquireOnly": true,
+    "tag": "Remote",
+    "title": "General Strength and Conditioning",
+    "price": 175,
+    "period": "month",
+    "featured": false,
+    "badges": [],
+    "program": "General Strength and Conditioning",
+    "gradient": "dark-red",
     "ctaStyle": "primary",
     "features": [
       { "text": "3–5 day/week programming based on goals & experience" },
       { "text": "Weekly check-ins" },
       { "text": "Goal-oriented strength programming" },
       { "text": "Progressive overload structure" }
-    ]
-  },
-  {
-    "id": "military",
-    "tag": "Remote",
-    "title": "Military / Fire Strength & Conditioning",
-    "price": 175,
-    "period": "month",
-    "featured": false,
-    "badge": null,
-    "program": "Military Strength & Conditioning",
-    "ctaStyle": "primary",
-    "features": [
-      { "text": "5 day/week programming" },
-      { "text": "Weekly check-ins" },
-      { "text": "Conditioning integrated with strength work" },
-      { "text": "Designed for the demands of service and duty" }
     ]
   }
 ]

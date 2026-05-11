@@ -1,6 +1,13 @@
 ---
 import ProgramCard from '../ProgramCard.astro';
-import programs from '../../data/programs.json';
+import type staticPrograms from '../../data/programs.json';
+import Footer from '../Footer.astro';
+
+interface Props {
+  programs: typeof staticPrograms;
+}
+
+const { programs } = Astro.props;
 ---
 
 <div class="slide">
@@ -11,18 +18,23 @@ import programs from '../../data/programs.json';
       <div class="cards-grid">
         {programs.map((program) => (
           <ProgramCard
+            id={program.id}
             tag={program.tag}
             title={program.title}
             price={program.price}
             period={program.period}
             features={program.features}
             featured={program.featured}
-            badge={program.badge}
+            badges={program.badges ?? []}
             program={program.program}
+            gradient={program.gradient}
             ctaStyle={program.ctaStyle as 'primary' | 'secondary'}
+            stripeUrl={program.stripeUrl}
+            inquireOnly={program.inquireOnly}
           />
         ))}
       </div>
     </div>
   </section>
+  <Footer />
 </div>

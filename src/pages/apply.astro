@@ -1,0 +1,229 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Apply for Coaching | Tank Performance and Weightlifting" bodyClass="page-standalone">
+  <header class="checkout-header">
+    <a href="/" class="checkout-logo-link" aria-label="Home — Tank Performance and Weightlifting">
+      <img src="/tpc_logo_red_no_bg.png" alt="Tank Performance and Weightlifting" class="checkout-logo" />
+    </a>
+  </header>
+
+  <main class="checkout-main">
+    <section class="apply">
+      <div class="section-inner">
+        <h2 class="section-heading">Let's Work Together</h2>
+        <p class="section-subheading">
+          My coaching is personalized for you and your goals, so make responses as detailed as possible!
+        </p>
+
+        <div class="form-success" id="form-success" hidden>
+          <h3 class="form-success-heading">You're on your way.</h3>
+          <p class="form-success-body">
+            Your application has been submitted. Coach Tiff will be in touch shortly.
+          </p>
+        </div>
+
+        <form id="coaching-form" novalidate>
+          <input type="hidden" name="access_key" value="fabe745e-b651-4a48-acc7-bc165024bf08" />
+          <input type="hidden" name="subject" value="New Athlete Application" />
+          <input type="hidden" name="from_name" value="Tank Performance and Weightlifting" />
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" />
+
+          <div class="form-group">
+            <label class="form-label" for="field-name">Full Name *</label>
+            <input class="form-input" type="text" id="field-name" name="name" autocomplete="name" required placeholder="Your full name" />
+            <span class="form-error" aria-live="polite" id="error-name" hidden>Please enter your name.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="field-email">Email Address *</label>
+            <input class="form-input" type="email" id="field-email" name="email" autocomplete="email" required placeholder="you@example.com" />
+            <span class="form-error" aria-live="polite" id="error-email" hidden>Please enter a valid email address.</span>
+          </div>
+
+          <fieldset class="form-group form-group--fieldset">
+            <legend class="form-label">What type of coaching are you interested in? *</legend>
+            <ul class="checkbox-list">
+              <li>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="program_type" value="Olympic Weightlifting" />
+                  <span class="checkbox-item-label">Olympic Weightlifting</span>
+                </label>
+              </li>
+              <li>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="program_type" value="General Strength and Conditioning" />
+                  <span class="checkbox-item-label">General Strength and Conditioning</span>
+                </label>
+              </li>
+              <li>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="program_type" value="Tactical Strength and Conditioning" />
+                  <span class="checkbox-item-label">Tactical Strength and Conditioning</span>
+                </label>
+              </li>
+              <li>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="program_type" value="Other" />
+                  <span class="checkbox-item-label">Other</span>
+                </label>
+              </li>
+            </ul>
+            <div class="other-text-wrap" hidden>
+              <input class="form-input" type="text" id="field-program-other" name="program_other" placeholder="Please describe..." />
+            </div>
+            <span class="form-error" aria-live="polite" id="error-program" hidden>Please select at least one option.</span>
+          </fieldset>
+
+          <div class="form-group">
+            <label class="form-label" for="field-schedule">How many days per week do you train, and do you follow a specific program? *</label>
+            <textarea class="form-input form-textarea" id="field-schedule" name="schedule" rows="3" required placeholder="e.g. 4 days/week, currently following a general strength program"></textarea>
+            <span class="form-error" aria-live="polite" id="error-schedule" hidden>Please describe your current training schedule.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="field-history">Tell me about your athletic history *</label>
+            <textarea class="form-input form-textarea" id="field-history" name="history" rows="4" required placeholder="This helps me understand your strengths and weaknesses so I can program accordingly."></textarea>
+            <span class="form-error" aria-live="polite" id="error-history" hidden>Please tell us about your athletic history.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="field-goals">Tell me about your athletic goals *</label>
+            <textarea class="form-input form-textarea" id="field-goals" name="goals" rows="4" required placeholder="How can I best support you with programming and coaching?"></textarea>
+            <span class="form-error" aria-live="polite" id="error-goals" hidden>Please tell us about your athletic goals.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="field-phone">Phone Number *</label>
+            <input class="form-input" type="tel" id="field-phone" name="phone" autocomplete="tel" placeholder="e.g. (555) 867-5309" />
+            <span class="form-error" aria-live="polite" id="error-contact" hidden>Please provide a phone number.</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary form-submit">Submit Application</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<script>
+  const form = document.getElementById('coaching-form') as HTMLFormElement | null;
+  const formSuccess = document.getElementById('form-success');
+  if (!form) throw new Error('coaching-form not found');
+
+  const otherCheckbox = form.querySelector<HTMLInputElement>('input[name="program_type"][value="Other"]');
+  const otherTextWrap = form.querySelector<HTMLElement>('.other-text-wrap');
+  const otherTextInput = document.getElementById('field-program-other') as HTMLInputElement | null;
+
+  otherCheckbox?.addEventListener('change', () => {
+    if (otherCheckbox.checked) {
+      otherTextWrap?.removeAttribute('hidden');
+      otherTextInput?.focus();
+    } else {
+      otherTextWrap?.setAttribute('hidden', '');
+      if (otherTextInput) otherTextInput.value = '';
+    }
+  });
+
+  function setError(fieldEl: HTMLElement | null, errorId: string, message: string) {
+    const errEl = document.getElementById(errorId);
+    if (errEl) { errEl.textContent = message; errEl.removeAttribute('hidden'); }
+    fieldEl?.classList.add('is-invalid');
+    return fieldEl;
+  }
+  function clearError(fieldEl: HTMLElement | null, errorId: string) {
+    document.getElementById(errorId)?.setAttribute('hidden', '');
+    fieldEl?.classList.remove('is-invalid');
+  }
+
+  (['field-name','field-email','field-schedule','field-history','field-goals'] as const)
+    .forEach(id => {
+      const el = document.getElementById(id);
+      el?.addEventListener('input', () => clearError(el, `error-${id.replace('field-','')}`));
+    });
+  const phoneField = document.getElementById('field-phone') as HTMLInputElement | null;
+  phoneField?.addEventListener('input', () => clearError(phoneField, 'error-contact'));
+  otherTextInput?.addEventListener('input', () => clearError(otherTextInput, 'error-program'));
+  form.querySelectorAll<HTMLInputElement>('input[name="program_type"]').forEach(cb =>
+    cb.addEventListener('change', () => { document.getElementById('error-program')?.setAttribute('hidden', ''); })
+  );
+
+  // Pre-select program from query param (?program=Olympic+Weightlifting)
+  const preselect = new URLSearchParams(window.location.search).get('program');
+  if (preselect) {
+    form.querySelectorAll<HTMLInputElement>('input[name="program_type"]').forEach((cb) => {
+      if (cb.value === preselect) cb.checked = true;
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errors: (HTMLElement | null)[] = [];
+
+    const nameField = document.getElementById('field-name') as HTMLInputElement;
+    const emailField = document.getElementById('field-email') as HTMLInputElement;
+    const scheduleField = document.getElementById('field-schedule') as HTMLTextAreaElement;
+    const historyField = document.getElementById('field-history') as HTMLTextAreaElement;
+    const goalsField = document.getElementById('field-goals') as HTMLTextAreaElement;
+    const checkedPrograms = form.querySelectorAll<HTMLInputElement>('input[name="program_type"]:checked');
+
+    if (!nameField.value.trim()) errors.push(setError(nameField, 'error-name', 'Please enter your name.'));
+    else clearError(nameField, 'error-name');
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) errors.push(setError(emailField, 'error-email', 'Please enter a valid email address.'));
+    else clearError(emailField, 'error-email');
+
+    if (checkedPrograms.length === 0) {
+      errors.push(setError(form.querySelector('input[name="program_type"]'), 'error-program', 'Please select at least one option.'));
+    } else {
+      clearError(null, 'error-program');
+      if (otherCheckbox?.checked && !otherTextInput?.value.trim()) {
+        errors.push(setError(otherTextInput, 'error-program', 'Please describe the other program.'));
+      }
+    }
+
+    if (!scheduleField.value.trim()) errors.push(setError(scheduleField, 'error-schedule', 'Please describe your current training schedule.'));
+    else clearError(scheduleField, 'error-schedule');
+
+    if (!historyField.value.trim()) errors.push(setError(historyField, 'error-history', 'Please tell us about your athletic history.'));
+    else clearError(historyField, 'error-history');
+
+    if (!goalsField.value.trim()) errors.push(setError(goalsField, 'error-goals', 'Please tell us about your athletic goals.'));
+    else clearError(goalsField, 'error-goals');
+
+    if (!phoneField?.value.trim()) {
+      errors.push(setError(phoneField, 'error-contact', 'Please provide a phone number.'));
+    } else clearError(phoneField, 'error-contact');
+
+    if (errors.length > 0) { errors[0]?.focus(); return; }
+
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting…'; }
+
+    const programLines = Array.from(checkedPrograms).map(cb => {
+      if (cb.value === 'Other') return `Other: ${otherTextInput?.value.trim() ?? ''}`;
+      return cb.value;
+    }).join(', ');
+
+    const formData = new FormData(form);
+    formData.set('program_type', programLines);
+
+    try {
+      const [res] = await Promise.all([
+        fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData }),
+        fetch('/api/submit-application', { method: 'POST', body: formData }).catch(() => null),
+      ]);
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message ?? 'Submission failed');
+      form.setAttribute('hidden', '');
+      if (formSuccess) {
+        formSuccess.removeAttribute('hidden');
+        formSuccess.scrollIntoView({ behavior: 'smooth' });
+      }
+    } catch {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Application'; }
+      alert('Something went wrong. Please try again or email us directly.');
+    }
+  });
+</script>

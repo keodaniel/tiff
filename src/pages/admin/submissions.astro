@@ -1,0 +1,77 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { env } from 'cloudflare:workers';
+
+let submissions: any[] = [];
+try {
+  const list = await env.SITE_DATA.list({ prefix: 'submissions:', limit: 100 });
+  const items = await Promise.all(
+    list.keys.map(async (key: { name: string }) => {
+      const raw = await env.SITE_DATA.get(key.name);
+      return raw ? JSON.parse(raw) : null;
+    })
+  );
+  submissions = items
+    .filter(Boolean)
+    .sort((a: any, b: any) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+} catch {}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric',
+    hour: 'numeric', minute: '2-digit', hour12: true,
+  });
+}
+---
+
+<AdminLayout title="Submissions">
+  <h1 class="admin-page-title">Application Submissions</h1>
+  {submissions.length === 0 ? (
+    <div class="admin-empty-state">
+      <p>No submissions yet. Applications submitted via the Apply page will appear here.</p>
+    </div>
+  ) : (
+    <div class="admin-sub-list">
+      {submissions.map((s: any) => (
+        <div class="admin-sub-card">
+          <div class="admin-sub-meta">
+            <span class="admin-sub-name">{s.name}</span>
+            <span>{s.email}</span>
+            {s.phone && <span>{s.phone}</span>}
+            <span class="admin-sub-date">{formatDate(s.submittedAt)}</span>
+          </div>
+          {s.program_type && (
+            <div class="admin-sub-field-row">
+              <span class="admin-sub-field-label">Program</span>
+              <span class="admin-sub-field-value">{s.program_type}</span>
+            </div>
+          )}
+          <details class="admin-sub-detail">
+            <summary class="admin-sub-summary">View full application</summary>
+            <div class="admin-sub-detail-body">
+              {s.schedule && (
+                <div class="admin-sub-field-group">
+                  <div class="admin-sub-field-label">Training Schedule</div>
+                  <div class="admin-sub-field-value">{s.schedule}</div>
+                </div>
+              )}
+              {s.history && (
+                <div class="admin-sub-field-group">
+                  <div class="admin-sub-field-label">Athletic History</div>
+                  <div class="admin-sub-field-value">{s.history}</div>
+                </div>
+              )}
+              {s.goals && (
+                <div class="admin-sub-field-group">
+                  <div class="admin-sub-field-label">Goals</div>
+                  <div class="admin-sub-field-value">{s.goals}</div>
+                </div>
+              )}
+            </div>
+          </details>
+        </div>
+      ))}
+    </div>
+  )}
+</AdminLayout>

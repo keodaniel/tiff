@@ -1,0 +1,25 @@
+graph TB
+    GH["GitHub Repository\n(keodaniel/tiff)"]
+    GH -->|git push triggers| CI["Cloudflare Pages CI\n(npm run build)"]
+
+    subgraph BuildProcess ["Build Process"]
+        direction LR
+        AB["astro build\n(SSR bundle)"]
+        FW["fix-wrangler.mjs\n(post-build)"]
+        AB --> FW
+    end
+
+    CI --> BuildProcess
+
+    BuildProcess -->|"dist/client/_worker.js\n+ static assets"| CF["Cloudflare Pages\n(tiff-epm.pages.dev)"]
+
+    CF -->|"Static files\n(images, CSS, JS)"| Browser["Browser"]
+    CF -->|"SSR requests\n(/, /admin/*, /apply)"| Worker["Astro SSR Worker\n(_worker.js)"]
+    Worker <-->|"Read / Write JSON"| KV[("Cloudflare KV\nSITE_DATA")]
+    Worker -->|"Rendered HTML"| Browser
+
+    subgraph Secrets ["CF Pages Dashboard"]
+        ENV["ADMIN_PASSWORD\nSESSION_SECRET\nSITE_DATA KV binding"]
+    end
+
+    Secrets -.->|"injected as env"| Worker

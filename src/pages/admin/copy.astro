@@ -1,0 +1,69 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { DEFAULT_COPY } from '../api/admin/copy';
+import { env } from 'cloudflare:workers';
+
+let copy = { ...DEFAULT_COPY };
+try {
+  const raw = await env.SITE_DATA.get('copy:home');
+  if (raw) copy = { ...DEFAULT_COPY, ...JSON.parse(raw) };
+} catch {}
+---
+
+<AdminLayout title="Site Copy">
+  <h1 class="admin-page-title">Site Copy</h1>
+
+  <form id="copy-form" class="admin-edit-form" style="max-width: 640px">
+    <div class="form-group">
+      <label class="form-label" for="eyebrow">Hero Tagline</label>
+      <input
+        class="form-input"
+        type="text"
+        id="eyebrow"
+        name="eyebrow"
+        value={copy.eyebrow}
+        required
+      />
+      <span class="admin-field-hint">Displayed below the logo on the home slide.</span>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="clubName">Club Name</label>
+      <input
+        class="form-input"
+        type="text"
+        id="clubName"
+        name="clubName"
+        value={copy.clubName}
+        required
+      />
+      <span class="admin-field-hint">Displayed under "Coach Tiff" on the home slide.</span>
+    </div>
+    <div class="admin-edit-actions">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+    <p class="admin-save-status" hidden></p>
+  </form>
+</AdminLayout>
+
+<script>
+  const form = document.getElementById('copy-form') as HTMLFormElement;
+  const status = form.querySelector<HTMLElement>('.admin-save-status')!;
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const res = await fetch('/api/admin/copy', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eyebrow: (d.get('eyebrow') as string).trim(),
+        clubName: (d.get('clubName') as string).trim(),
+      }),
+    });
+    status.textContent = res.ok ? 'Saved.' : 'Save failed. Please try again.';
+    status.className = `admin-save-status ${res.ok ? 'is-success' : 'is-error'}`;
+    status.hidden = false;
+    setTimeout(() => { status.hidden = true; }, 3000);
+  });
+</script>

@@ -1,47 +1,73 @@
 ---
+const GRADIENTS: Record<string, string> = {
+  'dark-red':      'linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #0a0a0a 100%)',
+  'purple-maroon': 'linear-gradient(135deg, #1a1020, #140010)',
+  'teal-navy':     'linear-gradient(135deg, #0f1a20, #081018)',
+  'deep-navy':     'linear-gradient(135deg, #0a1020, #060c18)',
+  'forest':        'linear-gradient(135deg, #141a10, #0a1008)',
+  'crimson':       'linear-gradient(135deg, #1a0808, #140000)',
+};
+
 interface Feature {
   text: string;
   url?: string;
 }
 
 interface Props {
+  id: string;
   tag: string;
   title: string;
   price: number;
   period: string;
   features: Feature[];
   featured?: boolean;
-  badge?: string | null;
+  badges?: string[];
   program: string;
+  gradient?: string;
   ctaStyle?: 'primary' | 'secondary';
+  stripeUrl?: string;
+  inquireOnly?: boolean;
 }
 
-const { tag, title, price, period, features, featured = false, badge, program, ctaStyle = 'primary' } = Astro.props;
+const { id, tag, title, price, period, features, featured = false, badges = [], program, gradient, stripeUrl, inquireOnly = false } = Astro.props;
+const gradientStyle = gradient ? (GRADIENTS[gradient] ?? gradient) : undefined;
 ---
 
 <article class={`card${featured ? ' card--featured' : ''}`} aria-label={`${title} membership`}>
-  {badge && <div class="card-badge">{badge}</div>}
-  <p class="card-tag">{tag}</p>
-  <div class="card-header">
+  <div class="card-title-banner" style={gradientStyle ? `background: ${gradientStyle}` : undefined}>
+    {badges.length > 0 && (
+      <div class="card-badges">
+        {badges.map((b) => <div class="card-badge">{b}</div>)}
+      </div>
+    )}
+    <p class="card-tag">{tag}</p>
     <h3 class="card-title">{title}</h3>
-    <div class="card-price">
-      <span class="card-price-amount">${price}</span>
-      <span class="card-price-period">/{period}</span>
+  </div>
+  <div class="card-body">
+    {!inquireOnly && (
+      <div class="card-price">
+        <span class="card-price-amount">${price}</span>
+        <span class="card-price-period">/{period}</span>
+      </div>
+    )}
+    <ul class="card-features" role="list">
+      {features.map((feature) => (
+        <li class="card-feature-item">
+          <span class="feature-check" aria-hidden="true">✓</span>
+          <span>
+            {feature.url
+              ? <a href={feature.url} target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.65);text-decoration:underline;">{feature.text}</a>
+              : feature.text}
+          </span>
+        </li>
+      ))}
+    </ul>
+    <div class="card-cta-group">
+      <a
+        href={`/apply?program=${encodeURIComponent(program)}`}
+        class="btn btn-secondary card-cta"
+      >Inquire</a>
+      {!inquireOnly && <a href={stripeUrl} class="btn btn-primary card-cta">Join Now</a>}
     </div>
   </div>
-  <ul class="card-features" role="list">
-    {features.map((feature) => (
-      <li class="card-feature-item">
-        <span class="feature-check" aria-hidden="true">✓</span>
-        <span>
-          {feature.url
-            ? <a href={feature.url} target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.85);text-decoration:underline;">{feature.text}</a>
-            : feature.text}
-        </span>
-      </li>
-    ))}
-  </ul>
-  <button class={`btn btn-${ctaStyle} card-cta`} data-go-slide="3" data-program={program}>
-    Apply Now
-  </button>
 </article>
