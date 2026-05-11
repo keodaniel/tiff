@@ -1,0 +1,37 @@
+graph LR
+    Source["src/\nAstro source files"]
+
+    subgraph Build ["npm run build"]
+        AB["astro build\nSSR bundling"]
+        FW["fix-wrangler.mjs"]
+        AB --> FW
+    end
+
+    subgraph Output ["Astro Output"]
+        Client["dist/client/\nstatic assets"]
+        Server["dist/server/\nentry.mjs"]
+    end
+
+    subgraph FixJobs ["fix-wrangler jobs"]
+        J1["Dedup KV bindings"]
+        J2["Bundle to dist/client"]
+        J3["Write wrangler.json"]
+    end
+
+    subgraph Deploy ["Cloudflare Pages"]
+        Worker["_worker.js SSR"]
+        Assets["Static assets"]
+    end
+
+    subgraph LocalDev ["Local Dev"]
+        DevCmd["npm run dev\nAstro HMR server"]
+        PrevCmd["npm run preview\nwrangler pages dev"]
+    end
+
+    Source --> Build
+    Build --> Output
+    Build --> FixJobs
+    Output --> Deploy
+    FixJobs --> Deploy
+    Source -.->|file watch| LocalDev
+    Output -.->|after build| LocalDev

@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant U as User
+    participant LP as Login Page
+    participant API as /api/admin/login
+    participant Auth as lib/auth.ts
+    participant MW as Middleware
+
+    U->>LP: GET /admin/login
+    LP->>Auth: verifySession(cookie)
+    alt Already authenticated
+        LP-->>U: 302 to /admin
+    else Not authenticated
+        LP-->>U: Show password form
+        U->>API: POST password
+        API->>Auth: checkPassword(input, ADMIN_PASSWORD)
+        alt Wrong password
+            API-->>U: 302 to /admin/login with error
+        else Correct password
+            API->>Auth: signSession(SESSION_SECRET)
+            note over Auth: HMAC-SHA256 signed token
+            Auth-->>API: signed token
+            API-->>U: Set-Cookie admin_session
+            API-->>U: 302 to /admin
+        end
+    end
+
+    U->>MW: GET /admin with cookie
+    MW->>Auth: verifySession(token, SESSION_SECRET)
+    note over MW: Verifies HMAC, checks 24hr window
+    alt Invalid or expired
+        MW-->>U: 302 to /admin/login
+    else Valid
+        MW-->>U: Render admin page
+    end

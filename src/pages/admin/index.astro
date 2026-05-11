@@ -1,0 +1,70 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { env } from 'cloudflare:workers';
+
+let submissionCount = 0;
+let flagsOn = 0;
+let flagsTotal = 0;
+
+try {
+  const list = await env.SITE_DATA.list({ prefix: 'submissions:', limit: 100 });
+  submissionCount = list.keys.length;
+} catch {}
+
+try {
+  const raw = await env.SITE_DATA.get('flags:all');
+  const flags = raw ? JSON.parse(raw) : {};
+  const values = Object.values(flags) as boolean[];
+  flagsTotal = values.length || 4;
+  flagsOn = values.filter(Boolean).length;
+} catch {}
+---
+
+<AdminLayout title="Dashboard">
+  <h1 class="admin-page-title">Dashboard</h1>
+  <div class="admin-dash-grid">
+    <a href="/admin/programs" class="admin-dash-card">
+      <div class="admin-dash-card-icon-text">P</div>
+      <div class="admin-dash-card-body">
+        <div class="admin-dash-card-label">Programs</div>
+        <div class="admin-dash-card-desc">Manage coaching program listings</div>
+      </div>
+    </a>
+    <a href="/admin/promos" class="admin-dash-card">
+      <div class="admin-dash-card-icon-text">%</div>
+      <div class="admin-dash-card-body">
+        <div class="admin-dash-card-label">Promo Codes</div>
+        <div class="admin-dash-card-desc">Manage partner discount codes</div>
+      </div>
+    </a>
+    <a href="/admin/copy" class="admin-dash-card">
+      <div class="admin-dash-card-icon-text">T</div>
+      <div class="admin-dash-card-body">
+        <div class="admin-dash-card-label">Site Copy</div>
+        <div class="admin-dash-card-desc">Edit homepage tagline and club name</div>
+      </div>
+    </a>
+    <a href="/admin/submissions" class="admin-dash-card">
+      <div class="admin-dash-card-count">{submissionCount}</div>
+      <div class="admin-dash-card-body">
+        <div class="admin-dash-card-label">Submissions</div>
+        <div class="admin-dash-card-desc">Coaching application submissions</div>
+      </div>
+    </a>
+    <a href="/admin/flags" class="admin-dash-card">
+      <div class="admin-dash-card-count">{flagsOn}/{flagsTotal || '—'}</div>
+      <div class="admin-dash-card-body">
+        <div class="admin-dash-card-label">Feature Flags</div>
+        <div class="admin-dash-card-desc">Toggle site features on or off</div>
+      </div>
+    </a>
+    <a href="https://dash.cloudflare.com" target="_blank" rel="noopener noreferrer" class="admin-dash-card">
+      <div class="admin-dash-card-icon-text">↗</div>
+      <div class="admin-dash-card-body">
+        <div class="admin-dash-card-label">Analytics</div>
+        <div class="admin-dash-card-desc">View traffic in the Cloudflare dashboard</div>
+      </div>
+    </a>
+  </div>
+</AdminLayout>
